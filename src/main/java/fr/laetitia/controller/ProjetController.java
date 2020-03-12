@@ -89,19 +89,19 @@ public class ProjetController {
 		}
 	}
 
-	/**
-	 * Obtenir les projets par type
-	 * @param Le libellé du type
-	 * @return Une liste de projets si elle n'est pas vide sinon un message et une erreur 404 
-	 */
-	@GetMapping("/findByType")
-	public ResponseEntity<?> findByType(@RequestParam int type) {
-		Optional<Type> t = typeRepository.findById(type);
-		if (t.isPresent()) {
-			List<Projet> projets = t.get().getProjets();
-			return ResponseEntity.ok(projets);
-		} else {
-			return HttpResponse.NOT_FOUND;
-		}
-	}
+//	/**
+//	 * Obtenir les projets par type
+//	 * @param Le libellé du type
+//	 * @return Une liste de projets si elle n'est pas vide sinon un message et une erreur 404 
+//	 */
+//	@GetMapping("/findByType")
+//	public ResponseEntity<?> findByType(@RequestParam int id) {
+//		Optional<Type> t = typeRepository.findById(id);
+//		if (t.isPresent()) {
+//			List<Projet> projets = t.get().getProjets();
+//			return ResponseEntity.ok(projets);
+//		} else {
+//			return HttpResponse.NOT_FOUND;
+//		}
+//	}
 }

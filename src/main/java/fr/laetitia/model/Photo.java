@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +23,7 @@ public class Photo {
 		private int id;
 		private String nom;
 		private String lien;
-		@OneToMany
+		@ManyToOne
 		private Projet projet;
 }		
 

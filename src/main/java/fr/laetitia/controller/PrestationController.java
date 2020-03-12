@@ -89,14 +89,14 @@ public class PrestationController {
 	 * @param L'id du projet
 	 * @return Une liste de prestations si elle n'est pas vide sinon un message et une erreur 404 
 	 */
-//	@GetMapping("/findByProjet")
-//	public ResponseEntity<?> findByProjet(@RequestParam int projet) {
-//		Optional<Projet> p = projetRepository.findById(projet);
-//		if (p.isPresent()) {
-//			List<Prestation> prestations = p.get().getPrestations();
-//			return ResponseEntity.ok(prestations);
-//		} else {
-//			return HttpResponse.NOT_FOUND;
-//		}
-//	}
+	@GetMapping("/findByProjet")
+	public ResponseEntity<?> findByProjet(@RequestParam int id) {
+		Optional<Projet> projet = projetRepository.findById(id);
+		if (projet.isPresent()) {
+			List<Prestation> prestations = projet.get().getPrestations();
+			return ResponseEntity.ok(prestations);
+		} else {
+			return HttpResponse.NOT_FOUND;
+		}
+	}
 }

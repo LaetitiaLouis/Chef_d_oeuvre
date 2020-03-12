@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,9 +28,8 @@ public class Admin {
 	@Column(unique = true)
 	private String password;
 	private String photo;
-	@Column(columnDefinition = "varchar(500)")
+	@Column(columnDefinition = "varchar(1000)")
 	private String presentation;
-	private Type type;
-	@ManyToOne
+	@OneToMany
 	private List<Projet> projets = new ArrayList<>();
 }

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -29,11 +30,13 @@ public class Projet {
 	private int id;
 	private String intitule;
 	private String description;
-	@OneToMany
-	private Admin admin;
-	@OneToMany
-	private Type type;
 	@ManyToOne
+	private Admin admin;
+	@ManyToOne
+	private Type type;
+	@OneToMany
 	private List<Photo> photos = new ArrayList<>();
+	@ManyToMany
+	private List<Prestation> prestations = new ArrayList<>();
 	}
 
