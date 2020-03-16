@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.laetitia.HttpResponse;
 import fr.laetitia.model.Admin;
 import fr.laetitia.repository.AdminRepository;
-import fr.laetitia.HttpResponse;
 
 /**
  * @author LOUISL
@@ -34,6 +34,7 @@ public class AdminController {
 
 	/**
 	 * Enregistrer un nouvel administrateur
+	 * 
 	 * @param L'objet admin dans le body de la requête
 	 * @return L'objet créé ou une erreur 409 si le login existe déjà
 	 */
@@ -49,6 +50,7 @@ public class AdminController {
 
 	/**
 	 * Vérifier si un administrateur avec le login proposé existe déjà
+	 * 
 	 * @param Le login d'un administrateur en paramètre de la requête
 	 * @return true si il existe sinon false
 	 */
@@ -59,6 +61,7 @@ public class AdminController {
 
 	/**
 	 * Modifier un administrateur
+	 * 
 	 * @param L'objet admin dans le body de la requête
 	 * @return L'objet admin modifié ou une erreur 404 et un message s'il n'a pas
 	 *         été trouvé en base de donnée
@@ -72,10 +75,11 @@ public class AdminController {
 			return HttpResponse.NOT_FOUND;
 		}
 	}
-	
+
 	/**
 	 * Supprimer un administrateur par son id
-	 * @param L'id de l'administrateur à supprimer 
+	 * 
+	 * @param L'id de l'administrateur à supprimer
 	 * @return Un message de confirmation
 	 */
 	@DeleteMapping("/delete")

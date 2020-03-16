@@ -2,9 +2,8 @@ package fr.laetitia.controller;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Optional;
@@ -20,14 +19,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.laetitia.model.Photo;
-import fr.laetitia.model.Projet;
-import fr.laetitia.repository.PhotoRepository;
-import fr.laetitia.repository.ProjetRepository;
+import fr.laetitia.model.Client;
+import fr.laetitia.repository.ClientRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PhotoControllerTest {
+public class ClientControllerTest {
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -35,20 +33,17 @@ public class PhotoControllerTest {
 	private ObjectMapper objectMapper;
 
 	@MockBean
-	PhotoRepository photoRepository;
+	ClientRepository clientRepository;
 	
-	@MockBean
-	ProjetRepository projetRepository;
-
-	private final Photo photo = new Photo();
-	private final String BASE_URL = "/api/photo";
+	private final Client client = new Client();
+	private final String BASE_URL = "/api/client";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
 	public void setUp() {
-		photo.setId(1);
+		client.setId(1);
 	}
-
+	
 	@Test
 	public void testDelete() throws Exception {
 		this.mockMvc.perform(delete(BASE_URL + "/delete?id=1")).andExpect(status().isOk());
@@ -56,30 +51,31 @@ public class PhotoControllerTest {
 
 	@Test
 	public void testNew() throws Exception {
-		when(photoRepository.save(photo)).thenReturn(photo);
-		when(photoRepository.findById(1)).thenReturn(Optional.of(photo));
-		photo.setId(2);
+		when(clientRepository.save(client)).thenReturn(client);
+		when(clientRepository.findById(1)).thenReturn(Optional.of(client));
+		client.setId(2);
 
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(photo)))
+				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(client)))
 				.andExpect(status().isCreated());
 
-		photo.setId(1);
+		client.setId(1);
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(photo)))
+				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(client)))
 				.andExpect(status().isConflict());
 	}
 
-//	@Test
-//	public void testFindByProjet() throws Exception{
-//		Projet projet = new Projet();
-//		projet.setPhoto(photos);
-//		when(this.projetRepository.findById(1)).thenReturn(Optional.of(projet));
-//		
-//		this.mockMvc.perform(get(BASE_URL + "/findByProjet?id=1")).andExpect(status().isOk())
-//		.andExpect(jsonPath("id").value("Id"));
-//
-//this.mockMvc.perform(get(BASE_URL + "/findByProjet?id=32")).andExpect(status().isNotFound());
-//	}
-//	
+	@Test
+	public void testUpdate() throws Exception {
+		when(clientRepository.save(client)).thenReturn(client);
+		when(clientRepository.findById(1)).thenReturn(Optional.of(client));
+
+		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(client)))
+				.andExpect(status().isCreated());
+
+		client.setId(2);
+		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(client)))
+				.andExpect(status().isNotFound());
+	}
+
 }

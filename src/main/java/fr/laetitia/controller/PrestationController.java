@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.laetitia.HttpResponse;
+import fr.laetitia.model.Client;
 import fr.laetitia.model.Prestation;
 import fr.laetitia.model.Projet;
-import fr.laetitia.model.Type;
+import fr.laetitia.repository.ClientRepository;
 import fr.laetitia.repository.PrestationRepository;
 import fr.laetitia.repository.ProjetRepository;
 
@@ -38,6 +39,9 @@ public class PrestationController {
 
 	@Autowired
 	ProjetRepository projetRepository;
+	
+	@Autowired 
+	ClientRepository clientRepository;
 
 	/**
 	 * Enregistrer une nouvelle prestation
@@ -99,4 +103,22 @@ public class PrestationController {
 			return HttpResponse.NOT_FOUND;
 		}
 	}
+	
+//	/**
+//	 * Obtenir les prestations par client
+//	 * @param L'id du client
+//	 * @return Une liste de prestations si elle n'est pas vide sinon un message et une erreur 404 
+//	 */
+//	@GetMapping("/findByClient")
+//	public ResponseEntity<?> findByClient(@RequestParam int id) {
+//		Optional<Client> client = clientRepository.findById(id);
+//		if (client.isPresent()) {
+//			List<Prestation> prestations = client.get().getPrestations();
+//			return ResponseEntity.ok(prestations);
+//		} else {
+//			return HttpResponse.NOT_FOUND;
+//		}
+//	}
+//	
+	
 }

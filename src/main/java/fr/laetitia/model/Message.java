@@ -16,7 +16,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Prospect {
+public class Message {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +28,5 @@ public class Prospect {
 	private String telephone;
 	private String objet;
 	@Column(columnDefinition = "varchar(500)")
-	private String message;
+	private String contenu;
 	}

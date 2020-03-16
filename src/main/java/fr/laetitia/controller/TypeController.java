@@ -1,5 +1,6 @@
 package fr.laetitia.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.laetitia.HttpResponse;
-import fr.laetitia.model.Admin;
 import fr.laetitia.model.Type;
 import fr.laetitia.repository.TypeRepository;
 
@@ -27,6 +28,20 @@ public class TypeController {
 	
 	@Autowired
 	TypeRepository typeRepository;
+	
+	/**
+	 * Obtenir la liste de tous les types
+	 * @return La liste si elle n'est pas vide sinon une erreur 404 et un message
+	 */
+	@GetMapping("/all")
+	public ResponseEntity<?> findAll() {
+		List<Type> types = (List<Type>) typeRepository.findAll();
+		if (types.isEmpty()) {
+			return HttpResponse.NOT_FOUND;
+		} else {
+			return ResponseEntity.ok(types);
+		}
+	}
 	
 	/**
 	 * Enregistrer un objet type

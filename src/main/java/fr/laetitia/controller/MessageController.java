@@ -16,64 +16,64 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.laetitia.HttpResponse;
-import fr.laetitia.model.Prospect;
-import fr.laetitia.repository.ProspectRepository;
+import fr.laetitia.model.Message;
+import fr.laetitia.repository.MessageRepository;
 
 /**
  * @author LOUISL
  *
  */
 @RestController
-@RequestMapping("/api/prospect")
+@RequestMapping("/api/message")
 @CrossOrigin("http://localhost:4200")
-public class ProspectController {
+public class MessageController {
 
 	@Autowired
-	ProspectRepository prospectRepository;
+	MessageRepository messageRepository;
 
 	/**
-	 * Enregistrer un objet prospect
+	 * Enregistrer un objet message
 	 * 
-	 * @param L'objet prospect dans le body de la requête
-	 * @return L'objet prospect est créé si l'id n'existe pas sinon un message et
+	 * @param L'objet message dans le body de la requête
+	 * @return L'objet message est créé si l'id n'existe pas sinon un message et
 	 *         une erreur 409
 	 */
 	@PostMapping("/new")
-	public @ResponseBody ResponseEntity<?> create(@RequestBody Prospect prospect) {
-		Optional<Prospect> p = prospectRepository.findById(prospect.getId());
+	public @ResponseBody ResponseEntity<?> create(@RequestBody Message message) {
+		Optional<Message> p = messageRepository.findById(message.getId());
 		if (p.isPresent()) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce type de projet existe déjà");
 		} else {
-			return ResponseEntity.status(HttpStatus.CREATED).body(prospectRepository.save(prospect));
+			return ResponseEntity.status(HttpStatus.CREATED).body(messageRepository.save(message));
 		}
 	}
 
 	/**
-	 * Modifier un prospect
+	 * Modifier un message
 	 * 
-	 * @param L'objet prospect dans le body de la requête
-	 * @return L'objet prospect modifié ou une erreur 404 et un message s'il n'a pas
+	 * @param L'objet message dans le body de la requête
+	 * @return L'objet message modifié ou une erreur 404 et un message s'il n'a pas
 	 *         été trouvé en base de données
 	 */
 	@PutMapping("/update")
-	public ResponseEntity<?> update(@RequestBody Prospect prospect) {
-		Optional<Prospect> p = prospectRepository.findById(prospect.getId());
+	public ResponseEntity<?> update(@RequestBody Message message) {
+		Optional<Message> p = messageRepository.findById(message.getId());
 		if (p.isPresent()) {
-			return ResponseEntity.status(HttpStatus.CREATED).body((prospectRepository.save(prospect)));
+			return ResponseEntity.status(HttpStatus.CREATED).body((messageRepository.save(message)));
 		} else {
 			return HttpResponse.NOT_FOUND;
 		}
 	}
 
 	/**
-	 * Supprimer un prospect par son id
+	 * Supprimer un message par son id
 	 * 
-	 * @param L'id du prospect à supprimer
+	 * @param L'id du message à supprimer
 	 * @return Un message de confirmation
 	 */
 	@DeleteMapping("/delete")
 	public ResponseEntity<?> deleteProspect(@RequestParam int id) {
-		prospectRepository.deleteById(id);
+		messageRepository.deleteById(id);
 		return ResponseEntity.ok("Prospect supprimé");
 	}
 }

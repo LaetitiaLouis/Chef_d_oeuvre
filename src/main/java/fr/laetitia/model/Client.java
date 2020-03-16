@@ -7,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
@@ -22,24 +20,21 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-//@NoArgsConstructor
-public class Projet {
-	
+public class Client {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String intitule;
-	private String description;
-	@ManyToOne
-	private Admin admin;
-	@ManyToOne
-	private Type type;
+	private String nom;
+	private String prenom;
+	private String adresse;
+	private String codePostale;
+	private String ville;
+	private String email;
+	private String telephone;
+	private String refDevis;
+	private String refFacture;
 	@OneToMany
-	private List<Photo> photos = new ArrayList<>();
-	@ManyToMany
-	private List<Prestation> prestations = new ArrayList<>();
-	@ManyToOne
-	private Client client;
-
-	}
-
+	private List<Projet> projets = new ArrayList <>();
+	//private List<Prestation> prestations = new ArrayList<>();
+}
