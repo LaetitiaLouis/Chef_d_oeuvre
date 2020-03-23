@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.laetitia.HttpResponse;
 import fr.laetitia.model.Client;
+import fr.laetitia.model.Photo;
 import fr.laetitia.model.Prestation;
 import fr.laetitia.model.Projet;
 import fr.laetitia.repository.ClientRepository;
@@ -39,8 +40,8 @@ public class PrestationController {
 
 	@Autowired
 	ProjetRepository projetRepository;
-	
-	@Autowired 
+
+	@Autowired
 	ClientRepository clientRepository;
 
 	/**
@@ -63,8 +64,8 @@ public class PrestationController {
 	 * Modifier une prestation
 	 * 
 	 * @param L'objet prestation dans le body de la requête
-	 * @return L'objet prestation modifié ou une erreur 404 et un message si elle n'a pas
-	 *         été trouvé en base de données
+	 * @return L'objet prestation modifié ou une erreur 404 et un message si elle
+	 *         n'a pas été trouvé en base de données
 	 */
 	@PutMapping("/update")
 	public ResponseEntity<?> update(@RequestBody Prestation prestation) {
@@ -75,50 +76,50 @@ public class PrestationController {
 			return HttpResponse.NOT_FOUND;
 		}
 	}
-		
+
 	/**
-	* Supprimer une prestation par son id
-	* 
-	* @param L'id de la prestation à supprimer
-	* @return Un message de confirmation
-	*/
+	 * Supprimer une prestation par son id
+	 * 
+	 * @param L'id de la prestation à supprimer
+	 * @return Un message de confirmation
+	 */
 	@DeleteMapping("/delete")
 	public ResponseEntity<?> deletePrestation(@RequestParam int id) {
 		prestationRepository.deleteById(id);
 		return ResponseEntity.ok("Prestation supprimée");
-		}
-	
+	}
+
 	/**
 	 * Obtenir les prestations par projet
-	 * @param L'id du projet
-	 * @return Une liste de prestations si elle n'est pas vide sinon un message et une erreur 404 
+	 * 
+	 * @param L'objet projet souhaité
+	 * @return Une liste de prestations si elle n'est pas vide sinon un message et
+	 *         une erreur 404
 	 */
 	@GetMapping("/findByProjet")
-	public ResponseEntity<?> findByProjet(@RequestParam int id) {
-		Optional<Projet> projet = projetRepository.findById(id);
-		if (projet.isPresent()) {
-			List<Prestation> prestations = projet.get().getPrestations();
+	public ResponseEntity<?> findByProjet(@RequestParam int projet) {
+		Optional<Projet> p = projetRepository.findById(projet);
+		if (p.isPresent()) {
+			List<Prestation> prestations = p.get().getPrestations();
 			return ResponseEntity.ok(prestations);
 		} else {
 			return HttpResponse.NOT_FOUND;
 		}
 	}
-	
-//	/**
-//	 * Obtenir les prestations par client
-//	 * @param L'id du client
-//	 * @return Une liste de prestations si elle n'est pas vide sinon un message et une erreur 404 
-//	 */
-//	@GetMapping("/findByClient")
-//	public ResponseEntity<?> findByClient(@RequestParam int id) {
-//		Optional<Client> client = clientRepository.findById(id);
-//		if (client.isPresent()) {
-//			List<Prestation> prestations = client.get().getPrestations();
-//			return ResponseEntity.ok(prestations);
-//		} else {
-//			return HttpResponse.NOT_FOUND;
-//		}
-//	}
-//	
-	
+
+	/**
+	 * Obtenir les prestations par client
+	 * @param L'objet client souhaité
+	 * @return Une liste de prestations si elle n'est pas vide sinon un message et une erreur 404 
+	 */
+	@GetMapping("/findByClient")
+	public ResponseEntity<?> findByClient(@RequestParam int client) {
+		Optional<Client> c = clientRepository.findById(client);
+		if (c.isPresent()) {
+			List<Prestation> prestations = c.get().getPrestations();
+			return ResponseEntity.ok(prestations);
+		} else {
+			return HttpResponse.NOT_FOUND;
+		}
+	}
 }

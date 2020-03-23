@@ -1,5 +1,6 @@
 package fr.laetitia.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,11 +34,26 @@ public class MessageController {
 	MessageRepository messageRepository;
 
 	/**
+	 * Afficher la liste des messages
+	 * 
+	 * @return la liste de messages si elle n'est pas vide sinon une erreur 404
+	 */
+	@GetMapping("/")
+	public ResponseEntity<?> findAll() {
+		List<Message> messages = (List<Message>) messageRepository.findAll();
+		if (messages.isEmpty()) {
+			return HttpResponse.NOT_FOUND;
+		} else {
+			return ResponseEntity.ok(messages);
+		}
+	}
+
+	/**
 	 * Enregistrer un objet message
 	 * 
 	 * @param L'objet message dans le body de la requête
-	 * @return L'objet message est créé si l'id n'existe pas sinon un message et
-	 *         une erreur 409
+	 * @return L'objet message est créé si l'id n'existe pas sinon un message et une
+	 *         erreur 409
 	 */
 	@PostMapping("/new")
 	public @ResponseBody ResponseEntity<?> create(@RequestBody Message message) {
@@ -74,6 +91,6 @@ public class MessageController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<?> deleteProspect(@RequestParam int id) {
 		messageRepository.deleteById(id);
-		return ResponseEntity.ok("Prospect supprimé");
+		return ResponseEntity.ok("Message supprimé");
 	}
 }

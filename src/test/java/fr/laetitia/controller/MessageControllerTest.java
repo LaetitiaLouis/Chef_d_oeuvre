@@ -34,7 +34,7 @@ public class MessageControllerTest {
 	private ObjectMapper objectMapper;
 
 	@MockBean
-	MessageRepository messageRepository;
+	private MessageRepository messageRepository;
 
 	private final Message message = new Message();
 	private final String BASE_URL = "/api/message";

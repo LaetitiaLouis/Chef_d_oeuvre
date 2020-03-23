@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -36,10 +38,9 @@ public class PhotoControllerTest {
 
 	@MockBean
 	PhotoRepository photoRepository;
-	
-	@MockBean
-	ProjetRepository projetRepository;
 
+	@MockBean
+	private ProjetRepository projetRepository;
 	private final Photo photo = new Photo();
 	private final String BASE_URL = "/api/photo";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
@@ -70,16 +71,20 @@ public class PhotoControllerTest {
 				.andExpect(status().isConflict());
 	}
 
-//	@Test
-//	public void testFindByProjet() throws Exception{
-//		Projet projet = new Projet();
-//		projet.setPhoto(photos);
-//		when(this.projetRepository.findById(1)).thenReturn(Optional.of(projet));
-//		
-//		this.mockMvc.perform(get(BASE_URL + "/findByProjet?id=1")).andExpect(status().isOk())
-//		.andExpect(jsonPath("id").value("Id"));
-//
-//this.mockMvc.perform(get(BASE_URL + "/findByProjet?id=32")).andExpect(status().isNotFound());
-//	}
-//	
+	@Test
+	public void testFindByProjet() throws Exception {
+		Projet projet = new Projet();
+		projet.setId(1);
+		projet.setPhotos(List.of(photo));
+		when(projetRepository.findById(1)).thenReturn(Optional.of(projet));
+
+		mockMvc.perform(get(BASE_URL + "/findByProjet?id=1")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].id").value(1));
+
+		mockMvc.perform(get(BASE_URL + "/findByProjet?id=32")).andExpect(status().isNotFound());
+
+		projet.setPhotos(new ArrayList<>());
+		mockMvc.perform(get(BASE_URL + "/findByProjet?id=1")).andExpect(status().isNotFound());
+	}
+
 }

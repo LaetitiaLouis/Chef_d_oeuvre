@@ -36,6 +36,22 @@ public class PhotoController {
 
 	@Autowired
 	ProjetRepository projetRepository;
+	
+	/**
+	 * Afficher toutes les photos
+	 * 
+	 * @return la liste de photos si elle n'est pas vide sinon une erreur 404
+	 */
+	
+	@GetMapping("/")
+	public ResponseEntity<?> findAll() {
+		List<Photo> photos = (List<Photo>) photoRepository.findAll();
+		if (photos.isEmpty()) {
+			return HttpResponse.NOT_FOUND;
+		} else {
+			return ResponseEntity.ok(photos);
+		}	
+}
 
 	/**
 	 * Enregistrer un objet photo
@@ -74,10 +90,10 @@ public class PhotoController {
 	 *         erreur 404
 	 */
 	@GetMapping("/findByProjet")
-	public ResponseEntity<?> findByProjet(@RequestParam int id) {
-		Optional<Projet> projet = projetRepository.findById(id);
-		if (projet.isPresent()) {
-			List<Photo> photos = projet.get().getPhotos();
+	public ResponseEntity<?> findByProjet(@RequestParam int projet) {
+		Optional<Projet> p = projetRepository.findById(projet);
+		if (p.isPresent()) {
+			List<Photo> photos = p.get().getPhotos();
 			return ResponseEntity.ok(photos);
 		} else {
 			return HttpResponse.NOT_FOUND;

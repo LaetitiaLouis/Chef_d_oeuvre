@@ -33,7 +33,7 @@ public class TypeController {
 	 * Obtenir la liste de tous les types
 	 * @return La liste si elle n'est pas vide sinon une erreur 404 et un message
 	 */
-	@GetMapping("/all")
+	@GetMapping("/")
 	public ResponseEntity<?> findAll() {
 		List<Type> types = (List<Type>) typeRepository.findAll();
 		if (types.isEmpty()) {

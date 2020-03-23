@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.laetitia.HttpResponse;
+import fr.laetitia.model.Photo;
 import fr.laetitia.model.Projet;
 import fr.laetitia.model.Type;
 import fr.laetitia.repository.PhotoRepository;
@@ -47,9 +49,11 @@ public class ProjetController {
 
 	/**
 	 * Obtenir la liste de tous les projets
-	 * @return La liste de tout les projets si elle n'est pas vide sinon un message et une erreur 404
+	 * 
+	 * @return La liste de tous les projets si elle n'est pas vide sinon un message
+	 *         et une erreur 404
 	 */
-	@GetMapping("/all")
+	@GetMapping("/")
 	public ResponseEntity<?> findAll() {
 		List<Projet> projets = (List<Projet>) projetRepository.findAll();
 		if (projets.isEmpty()) {
@@ -61,6 +65,7 @@ public class ProjetController {
 
 	/**
 	 * Modifier un projet
+	 * 
 	 * @param L'objet projet modifié en paramètre de la requête
 	 * @return Le projet modifié s'il existe sinon un message et une erreur 404
 	 */
@@ -76,8 +81,10 @@ public class ProjetController {
 
 	/**
 	 * Enregistrer un projet
+	 * 
 	 * @param Le projet dans le body de la requête
-	 * @return Le projet crée si il n'existe pas déjà sinon un message et une erreur 404       
+	 * @return Le projet crée si il n'existe pas déjà sinon un message et une erreur
+	 *         404
 	 */
 	@PostMapping("/new")
 	public @ResponseBody ResponseEntity<?> create(@RequestBody Projet projet) {
@@ -89,19 +96,31 @@ public class ProjetController {
 		}
 	}
 
-//	/**
-//	 * Obtenir les projets par type
-//	 * @param Le libellé du type
-//	 * @return Une liste de projets si elle n'est pas vide sinon un message et une erreur 404 
-//	 */
-//	@GetMapping("/findByType")
-//	public ResponseEntity<?> findByType(@RequestParam int id) {
-//		Optional<Type> t = typeRepository.findById(id);
-//		if (t.isPresent()) {
-//			List<Projet> projets = t.get().getProjets();
-//			return ResponseEntity.ok(projets);
-//		} else {
-//			return HttpResponse.NOT_FOUND;
-//		}
-//	}
+	/**
+	 * Obtenir les projets par type
+	 * @param Le libellé du type
+	 * @return Une liste de projets si elle n'est pas vide sinon un message et une erreur 404 
+	 */
+	@GetMapping("/findByType")
+	public ResponseEntity<?> findByType(@RequestParam int type) {
+		Optional<Type> t = typeRepository.findById(type);
+		if (t.isPresent()) {
+			List<Projet> projets = t.get().getProjets();
+			return ResponseEntity.ok(projets);
+		} else {
+			return HttpResponse.NOT_FOUND;
+		}
+	}
+		
+	/**
+	 * Supprimer un projet par son id
+	 * 
+	 * @param L'id du projet à supprimer
+	 * @return Un message de confirmation
+	 */
+	@DeleteMapping("/delete")
+	public ResponseEntity<?> deleteProjet(@RequestParam int id) {
+		projetRepository.deleteById(id);
+		return ResponseEntity.ok("Projet supprimé");
+	}
 }

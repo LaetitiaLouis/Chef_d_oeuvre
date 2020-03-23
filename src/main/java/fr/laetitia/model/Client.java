@@ -28,7 +28,7 @@ public class Client {
 	private String nom;
 	private String prenom;
 	private String adresse;
-	private String codePostale;
+	private String codePostal;
 	private String ville;
 	private String email;
 	private String telephone;
@@ -36,5 +36,6 @@ public class Client {
 	private String refFacture;
 	@OneToMany
 	private List<Projet> projets = new ArrayList <>();
-	//private List<Prestation> prestations = new ArrayList<>();
+	private List<Prestation> prestations = new ArrayList<>();
+	
 }

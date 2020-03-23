@@ -29,4 +29,5 @@ public class Message {
 	private String objet;
 	@Column(columnDefinition = "varchar(500)")
 	private String contenu;
+	private boolean client;
 	}

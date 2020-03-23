@@ -87,4 +87,26 @@ public class AdminController {
 		adminRepository.deleteById(login);
 		return ResponseEntity.ok("Administrateur supprimé");
 	}
+
+	/**
+	 * connecte un administrateur
+	 * 
+	 * @param L'objet admin dans le body de la requête
+	 * @return L'objet crée ou une erreur 409 et un message si le login et le mot de
+	 *         passe sont correct
+	 */
+	@PostMapping("/connect")
+	public ResponseEntity<?> connection(@RequestBody Admin admin) {
+		Optional<Admin> user = adminRepository.findById(admin.getLogin());
+		if (user.isPresent()) {
+			if (admin.getPassword().equals(user.get().getPassword())) {
+				return ResponseEntity.ok(user.get());
+			} else {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Accès refusé");
+			}
+		} else {
+			return HttpResponse.NOT_FOUND;
+
+		}
+	}
 }

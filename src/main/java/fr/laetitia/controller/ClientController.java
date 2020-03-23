@@ -1,5 +1,6 @@
 package fr.laetitia.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +32,23 @@ public class ClientController {
 
 	@Autowired
 	ClientRepository clientRepository;
-
+	
+	/**
+	 * Afficher la liste des clients
+	 * 
+	 * return la liste de clients si elle n'est pas vide sinon une erreur 404
+	 */
+	@GetMapping("/")
+	public ResponseEntity<?> findAll() {
+		List<Client> clients = (List<Client>) clientRepository.findAll();
+		if (clients.isEmpty()) {
+			return HttpResponse.NOT_FOUND;
+		} else {
+			return ResponseEntity.ok(clients);
+		}	
+	}
+	
+	
 	/**
 	 * Enregistrer un nouveau client
 	 * 
