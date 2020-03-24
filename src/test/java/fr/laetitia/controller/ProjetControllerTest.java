@@ -53,12 +53,12 @@ public class ProjetControllerTest {
 	public void testGetAll() throws Exception {
 		when(projetRepository.findAll()).thenReturn(List.of(projet));
 
-		this.mockMvc.perform(get(BASE_URL + "/all")).andExpect(status().isOk())
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].intitule").value("Maison1"));
 
 		when(this.projetRepository.findAll()).thenReturn(new ArrayList<>());
 
-		this.mockMvc.perform(get(BASE_URL + "/all")).andExpect(status().isNotFound());
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());
 	}
 
 

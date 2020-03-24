@@ -2,10 +2,14 @@ package fr.laetitia.controller;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +47,19 @@ public class ClientControllerTest {
 	public void setUp() {
 		client.setId(1);
 	}
+	
+	@Test
+	public void testGetAll() throws Exception {
+		when(clientRepository.findAll()).thenReturn(List.of(client));
+
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].nom").value("Client1"));
+
+		when(this.clientRepository.findAll()).thenReturn(new ArrayList<>());
+
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());
+	}
+
 	
 	@Test
 	public void testDelete() throws Exception {

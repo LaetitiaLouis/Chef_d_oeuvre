@@ -32,7 +32,7 @@ public class ClientController {
 
 	@Autowired
 	ClientRepository clientRepository;
-	
+
 	/**
 	 * Afficher la liste des clients
 	 * 
@@ -45,10 +45,9 @@ public class ClientController {
 			return HttpResponse.NOT_FOUND;
 		} else {
 			return ResponseEntity.ok(clients);
-		}	
+		}
 	}
-	
-	
+
 	/**
 	 * Enregistrer un nouveau client
 	 * 

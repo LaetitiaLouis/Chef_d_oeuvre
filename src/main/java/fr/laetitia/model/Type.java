@@ -21,7 +21,7 @@ public class Type {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String libelle;
-	@OneToMany
+	@OneToMany(mappedBy = "type")
 	private List<Projet> projets = new ArrayList<>();
-	
+
 }

@@ -25,12 +25,13 @@ import fr.laetitia.repository.TypeRepository;
 @RequestMapping("/api/type")
 @CrossOrigin("http://localhost:4200")
 public class TypeController {
-	
+
 	@Autowired
 	TypeRepository typeRepository;
-	
+
 	/**
 	 * Obtenir la liste de tous les types
+	 * 
 	 * @return La liste si elle n'est pas vide sinon une erreur 404 et un message
 	 */
 	@GetMapping("/")
@@ -42,26 +43,30 @@ public class TypeController {
 			return ResponseEntity.ok(types);
 		}
 	}
-	
+
 	/**
 	 * Enregistrer un objet type
-	 * @param L'objet type dans le body de la requête 
-	 * @return L'objet type est créé s'il n'existe pas sinon un message et une erreur 409
+	 * 
+	 * @param L'objet type dans le body de la requête
+	 * @return L'objet type est créé s'il n'existe pas sinon un message et une
+	 *         erreur 409
 	 */
 	@PostMapping("/new")
 	public @ResponseBody ResponseEntity<?> create(@RequestBody Type type) {
 		Optional<Type> maybeType = typeRepository.findById(type.getId());
-		if(maybeType.isPresent()) {
+		if (maybeType.isPresent()) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce type de projet existe déjà");
 		} else {
 			return ResponseEntity.status(HttpStatus.CREATED).body(typeRepository.save(type));
 		}
 	}
-	
+
 	/**
 	 * Modifier un type
+	 * 
 	 * @param L'objet type dans le body de la requête
-	 * @return L'objet type modifié ou une erreur 404 et un message s'il n'a pas été trouvé en base de données
+	 * @return L'objet type modifié ou une erreur 404 et un message s'il n'a pas été
+	 *         trouvé en base de données
 	 */
 	@PutMapping("/update")
 	public ResponseEntity<?> update(@RequestBody Type type) {
@@ -72,10 +77,11 @@ public class TypeController {
 			return HttpResponse.NOT_FOUND;
 		}
 	}
-	
+
 	/**
 	 * Supprimer un type par son id
-	 * @param L'id du type à supprimer 
+	 * 
+	 * @param L'id du type à supprimer
 	 * @return Un message de confirmation
 	 */
 	@DeleteMapping("/delete")
@@ -83,6 +89,5 @@ public class TypeController {
 		typeRepository.deleteById(id);
 		return ResponseEntity.ok("Type supprimé");
 	}
-	
-	
+
 }

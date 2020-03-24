@@ -51,14 +51,14 @@ public class TypeControllerTest {
 	}
 
 	@Test
-	public void testGetAllType() throws Exception {
+	public void testGetAll() throws Exception {
 		when(typeRepository.findAll()).thenReturn(List.of(type));
 
-		mockMvc.perform(get(BASE_URL + "/all")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].libelle").value("piscine"));
 
 		when(typeRepository.findAll()).thenReturn(new ArrayList<>());
-		mockMvc.perform(get(BASE_URL + "/all")).andExpect(status().isNotFound());
+		mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());
 	}
 
 	@Test

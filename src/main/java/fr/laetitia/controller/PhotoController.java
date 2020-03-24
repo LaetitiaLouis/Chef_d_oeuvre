@@ -36,13 +36,13 @@ public class PhotoController {
 
 	@Autowired
 	ProjetRepository projetRepository;
-	
+
 	/**
 	 * Afficher toutes les photos
 	 * 
 	 * @return la liste de photos si elle n'est pas vide sinon une erreur 404
 	 */
-	
+
 	@GetMapping("/")
 	public ResponseEntity<?> findAll() {
 		List<Photo> photos = (List<Photo>) photoRepository.findAll();
@@ -50,8 +50,8 @@ public class PhotoController {
 			return HttpResponse.NOT_FOUND;
 		} else {
 			return ResponseEntity.ok(photos);
-		}	
-}
+		}
+	}
 
 	/**
 	 * Enregistrer un objet photo

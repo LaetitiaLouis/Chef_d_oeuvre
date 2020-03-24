@@ -1,10 +1,13 @@
 package fr.laetitia.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +26,8 @@ public class Photo {
 		private int id;
 		private String nom;
 		private String lien;
-		@ManyToOne
+		@JsonIgnore
+		@ManyToOne(cascade = CascadeType.MERGE)
 		private Projet projet;
 }		
 

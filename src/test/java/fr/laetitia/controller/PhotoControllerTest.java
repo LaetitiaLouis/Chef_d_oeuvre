@@ -87,4 +87,16 @@ public class PhotoControllerTest {
 		mockMvc.perform(get(BASE_URL + "/findByProjet?id=1")).andExpect(status().isNotFound());
 	}
 
+	@Test
+	public void testGetAll() throws Exception {
+		when(photoRepository.findAll()).thenReturn(List.of(photo));
+
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].nom").value("Photo1"));
+
+		when(this.photoRepository.findAll()).thenReturn(new ArrayList<>());
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());
+
+	}
+
 }

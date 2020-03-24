@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.laetitia.HttpResponse;
-import fr.laetitia.model.Photo;
+import fr.laetitia.model.Prestation;
 import fr.laetitia.model.Projet;
 import fr.laetitia.model.Type;
 import fr.laetitia.repository.PhotoRepository;
@@ -39,7 +39,7 @@ public class ProjetController {
 	ProjetRepository projetRepository;
 
 	@Autowired
-	PrestationRepository presentationrepository;
+	PrestationRepository prestationRepository;
 
 	@Autowired
 	PhotoRepository photoRepository;
@@ -98,8 +98,10 @@ public class ProjetController {
 
 	/**
 	 * Obtenir les projets par type
+	 * 
 	 * @param Le libellé du type
-	 * @return Une liste de projets si elle n'est pas vide sinon un message et une erreur 404 
+	 * @return Une liste de projets si elle n'est pas vide sinon un message et une
+	 *         erreur 404
 	 */
 	@GetMapping("/findByType")
 	public ResponseEntity<?> findByType(@RequestParam int type) {
@@ -111,7 +113,25 @@ public class ProjetController {
 			return HttpResponse.NOT_FOUND;
 		}
 	}
-		
+
+	/**
+	 * Obtenir les projets par prestation
+	 * 
+	 * @param Le libellé du prestation
+	 * @return Une liste de projets si elle n'est pas vide sinon un message et une
+	 *         erreur 404
+	 */
+	@GetMapping("/findByPrestation")
+	public ResponseEntity<?> findByPrestation(@RequestParam int prestation) {
+		Optional<Prestation> p = prestationRepository.findById(prestation);
+		if (p.isPresent()) {
+			List<Projet> projets = p.get().getProjets();
+			return ResponseEntity.ok(projets);
+		} else {
+			return HttpResponse.NOT_FOUND;
+		}
+	}
+
 	/**
 	 * Supprimer un projet par son id
 	 * 

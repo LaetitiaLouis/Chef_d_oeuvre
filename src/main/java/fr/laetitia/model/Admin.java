@@ -3,10 +3,10 @@ package fr.laetitia.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
@@ -30,6 +30,6 @@ public class Admin {
 	private String photo;
 	@Column(columnDefinition = "varchar(1000)")
 	private String presentation;
-	@OneToMany
+	@OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
 	private List<Projet> projets = new ArrayList<>();
 }

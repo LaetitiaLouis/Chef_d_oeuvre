@@ -3,6 +3,7 @@ package fr.laetitia.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,12 +31,13 @@ public class Client {
 	private String adresse;
 	private String codePostal;
 	private String ville;
+	@Column(unique = true)
 	private String email;
 	private String telephone;
 	private String refDevis;
 	private String refFacture;
-	@OneToMany
-	private List<Projet> projets = new ArrayList <>();
-	private List<Prestation> prestations = new ArrayList<>();
-	
+	@OneToMany(mappedBy = "client")
+	private List<Projet> projets = new ArrayList<>();
+	// private List<Prestation> prestations = new ArrayList<>();
+
 }

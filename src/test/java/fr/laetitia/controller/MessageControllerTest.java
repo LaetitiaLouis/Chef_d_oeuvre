@@ -2,10 +2,14 @@ package fr.laetitia.controller;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -51,19 +55,29 @@ public class MessageControllerTest {
 	}
 
 	@Test
+	public void testGetAll() throws Exception {
+		when(messageRepository.findAll()).thenReturn(List.of(message));
+
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].objet").value("Mess1"));
+
+		when(this.messageRepository.findAll()).thenReturn(new ArrayList<>());
+
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());
+	}
+
+	@Test
 	public void testNew() throws Exception {
 		when(messageRepository.save(message)).thenReturn(message);
 		when(messageRepository.findById(1)).thenReturn(Optional.of(message));
 		message.setId(2);
 
-		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(message)))
-				.andExpect(status().isCreated());
+		mockMvc.perform(post(BASE_URL + "/new").accept(JSON).contentType(JSON)
+				.content(objectMapper.writeValueAsString(message))).andExpect(status().isCreated());
 
 		message.setId(1);
-		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(message)))
-				.andExpect(status().isConflict());
+		mockMvc.perform(post(BASE_URL + "/new").accept(JSON).contentType(JSON)
+				.content(objectMapper.writeValueAsString(message))).andExpect(status().isConflict());
 	}
 
 	@Test
