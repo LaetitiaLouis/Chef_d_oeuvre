@@ -26,7 +26,7 @@ import fr.laetitia.repository.ClientRepository;
  */
 
 @RestController
-@RequestMapping("/api/client")
+@RequestMapping("/client")
 @CrossOrigin("http://localhost:4200")
 public class ClientController {
 

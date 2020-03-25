@@ -26,7 +26,7 @@ import fr.laetitia.repository.MessageRepository;
  *
  */
 @RestController
-@RequestMapping("/api/message")
+@RequestMapping("/message")
 @CrossOrigin("http://localhost:4200")
 public class MessageController {
 
@@ -59,7 +59,7 @@ public class MessageController {
 	public @ResponseBody ResponseEntity<?> create(@RequestBody Message message) {
 		Optional<Message> p = messageRepository.findById(message.getId());
 		if (p.isPresent()) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce type de projet existe déjà");
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce message existe déjà");
 		} else {
 			return ResponseEntity.status(HttpStatus.CREATED).body(messageRepository.save(message));
 		}

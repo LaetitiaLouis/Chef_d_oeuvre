@@ -22,7 +22,7 @@ import fr.laetitia.model.Type;
 import fr.laetitia.repository.TypeRepository;
 
 @RestController
-@RequestMapping("/api/type")
+@RequestMapping("/type")
 @CrossOrigin("http://localhost:4200")
 public class TypeController {
 

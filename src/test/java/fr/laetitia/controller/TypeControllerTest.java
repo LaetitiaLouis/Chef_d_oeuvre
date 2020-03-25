@@ -39,9 +39,8 @@ public class TypeControllerTest {
 	@MockBean
 	TypeRepository typeRepository;
 
-	
 	private final Type type = new Type();
-	private final String BASE_URL = "/api/type";
+	private final String BASE_URL = "/type";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -93,5 +92,6 @@ public class TypeControllerTest {
 		mockMvc.perform(
 				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(type)))
 				.andExpect(status().isConflict());
-	}	
+	}
+
 }

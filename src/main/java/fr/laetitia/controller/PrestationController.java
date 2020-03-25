@@ -29,7 +29,7 @@ import fr.laetitia.repository.ProjetRepository;
  */
 
 @RestController
-@RequestMapping("/api/prestation")
+@RequestMapping("/prestation")
 @CrossOrigin("http://localhost:4200")
 public class PrestationController {
 
@@ -99,27 +99,27 @@ public class PrestationController {
 		Optional<Projet> p = projetRepository.findById(projet);
 		if (p.isPresent()) {
 			List<Prestation> prestations = p.get().getPrestations();
-			return ResponseEntity.ok(prestations);
+			if (prestations.isEmpty()) {
+				return HttpResponse.NOT_FOUND;
+			} else {
+				return ResponseEntity.ok(prestations);
+			}
 		} else {
 			return HttpResponse.NOT_FOUND;
 		}
 	}
 
-	/**
-	 * Obtenir les prestations par client
-	 * 
-	 * @param L'objet client souhaité
-	 * @return Une liste de prestations si elle n'est pas vide sinon un message et
-	 *         une erreur 404
-	 */
-/*	@GetMapping("/findByClient")
-	public ResponseEntity<?> findByClient(@RequestParam int client) {
-		Optional<Client> c = clientRepository.findById(client);
-		if (c.isPresent()) {
-			List<Prestation> prestations = c.get().getPrestations();
-			return ResponseEntity.ok(prestations);
-		} else {
-			return HttpResponse.NOT_FOUND;
-		}
-	}*/
+//	 /**
+//	 * Obtenir les prestations par client
+//	 * 
+//	 * @param L'objet client souhaité
+//	 * @return Une liste de prestations si elle n'est pas vide sinon un message et
+//	 *         une erreur 404
+//	 */
+//	  @GetMapping("/findByClient") public ResponseEntity<?>
+//	  findByClient(@RequestParam int client) { Optional<Client> c =
+//	  clientRepository.findById(client); if (c.isPresent()) { List<Prestation>
+//	  prestations = c.get().getPrestations(); return
+//	  ResponseEntity.ok(prestations); } else { return HttpResponse.NOT_FOUND; } }
+//
 }

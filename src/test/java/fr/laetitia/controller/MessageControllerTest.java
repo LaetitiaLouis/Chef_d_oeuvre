@@ -41,7 +41,7 @@ public class MessageControllerTest {
 	private MessageRepository messageRepository;
 
 	private final Message message = new Message();
-	private final String BASE_URL = "/api/message";
+	private final String BASE_URL = "/message";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -58,8 +58,7 @@ public class MessageControllerTest {
 	public void testGetAll() throws Exception {
 		when(messageRepository.findAll()).thenReturn(List.of(message));
 
-		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.[0].objet").value("Mess1"));
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk()).andExpect(jsonPath("$.[0].id").value(1));
 
 		when(this.messageRepository.findAll()).thenReturn(new ArrayList<>());
 

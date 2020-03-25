@@ -40,7 +40,7 @@ public class ClientControllerTest {
 	ClientRepository clientRepository;
 	
 	private final Client client = new Client();
-	private final String BASE_URL = "/api/client";
+	private final String BASE_URL = "/client";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -53,7 +53,7 @@ public class ClientControllerTest {
 		when(clientRepository.findAll()).thenReturn(List.of(client));
 
 		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.[0].nom").value("Client1"));
+				.andExpect(jsonPath("$.[0].id").value(1));
 
 		when(this.clientRepository.findAll()).thenReturn(new ArrayList<>());
 

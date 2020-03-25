@@ -31,7 +31,7 @@ import fr.laetitia.repository.TypeRepository;
  *
  */
 @RestController
-@RequestMapping("/api/projet")
+@RequestMapping("/projet")
 @CrossOrigin("http://localhost:4200")
 public class ProjetController {
 
@@ -108,7 +108,11 @@ public class ProjetController {
 		Optional<Type> t = typeRepository.findById(type);
 		if (t.isPresent()) {
 			List<Projet> projets = t.get().getProjets();
-			return ResponseEntity.ok(projets);
+			if (projets.isEmpty()) {
+				return HttpResponse.NOT_FOUND;
+			} else {
+				return ResponseEntity.ok(projets);
+			}
 		} else {
 			return HttpResponse.NOT_FOUND;
 		}
@@ -126,7 +130,11 @@ public class ProjetController {
 		Optional<Prestation> p = prestationRepository.findById(prestation);
 		if (p.isPresent()) {
 			List<Projet> projets = p.get().getProjets();
+			if (projets.isEmpty()) {
+				return HttpResponse.NOT_FOUND;
+			} else {
 			return ResponseEntity.ok(projets);
+			}
 		} else {
 			return HttpResponse.NOT_FOUND;
 		}

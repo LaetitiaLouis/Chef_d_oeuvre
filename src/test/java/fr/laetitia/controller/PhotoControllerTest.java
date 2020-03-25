@@ -37,12 +37,13 @@ public class PhotoControllerTest {
 	private ObjectMapper objectMapper;
 
 	@MockBean
-	PhotoRepository photoRepository;
+	private PhotoRepository photoRepository;
 
 	@MockBean
 	private ProjetRepository projetRepository;
+	
 	private final Photo photo = new Photo();
-	private final String BASE_URL = "/api/photo";
+	private final String BASE_URL = "/photo";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -74,25 +75,24 @@ public class PhotoControllerTest {
 	@Test
 	public void testFindByProjet() throws Exception {
 		Projet projet = new Projet();
-		projet.setId(1);
+		projet.setId(10);
 		projet.setPhotos(List.of(photo));
-		when(projetRepository.findById(1)).thenReturn(Optional.of(projet));
+		when(projetRepository.findById(10)).thenReturn(Optional.of(projet));
 
-		mockMvc.perform(get(BASE_URL + "/findByProjet?id=1")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_URL + "/findByProjet?projet=10")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].id").value(1));
 
-		mockMvc.perform(get(BASE_URL + "/findByProjet?id=32")).andExpect(status().isNotFound());
+		mockMvc.perform(get(BASE_URL + "/findByProjet?projet=2")).andExpect(status().isNotFound());
 
 		projet.setPhotos(new ArrayList<>());
-		mockMvc.perform(get(BASE_URL + "/findByProjet?id=1")).andExpect(status().isNotFound());
+		mockMvc.perform(get(BASE_URL + "/findByProjet?projet=10")).andExpect(status().isNotFound());
 	}
 
 	@Test
 	public void testGetAll() throws Exception {
 		when(photoRepository.findAll()).thenReturn(List.of(photo));
 
-		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.[0].nom").value("Photo1"));
+		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk()).andExpect(jsonPath("$.[0].id").value(1));
 
 		when(this.photoRepository.findAll()).thenReturn(new ArrayList<>());
 		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());

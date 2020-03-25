@@ -23,8 +23,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import fr.laetitia.model.Prestation;
 import fr.laetitia.model.Projet;
+import fr.laetitia.model.Type;
+import fr.laetitia.repository.PrestationRepository;
 import fr.laetitia.repository.ProjetRepository;
+import fr.laetitia.repository.TypeRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -39,8 +43,14 @@ public class ProjetControllerTest {
 	@MockBean
 	ProjetRepository projetRepository;
 
+	@MockBean
+	TypeRepository typeRepository;
+
+	@MockBean
+	PrestationRepository prestationRepository;
+
 	private final Projet projet = new Projet();
-	private final String BASE_URL = "/api/projet";
+	private final String BASE_URL = "/projet";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -48,7 +58,7 @@ public class ProjetControllerTest {
 		projet.setId(1);
 		projet.setIntitule("Maison1");
 	}
-	
+
 	@Test
 	public void testGetAll() throws Exception {
 		when(projetRepository.findAll()).thenReturn(List.of(projet));
@@ -60,7 +70,6 @@ public class ProjetControllerTest {
 
 		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());
 	}
-
 
 	@Test
 	public void testDelete() throws Exception {
@@ -94,6 +103,40 @@ public class ProjetControllerTest {
 		projet.setId(2);
 		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(projet)))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void testFindByType() throws Exception {
+		Type type = new Type();
+		type.setId(10);
+		type.setProjets(List.of(projet));
+		when(typeRepository.findById(10)).thenReturn(Optional.of(type));
+
+		mockMvc.perform(get(BASE_URL + "/findByType?type=10")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].id").value(1));
+
+		mockMvc.perform(get(BASE_URL + "findByType?type=2")).andExpect(status().isNotFound());
+
+		type.setProjets(new ArrayList<>());
+		mockMvc.perform(get(BASE_URL + "/findByType?type=10")).andExpect(status().isNotFound());
+
+	}
+
+	@Test
+	public void testFindByPrestation() throws Exception {
+		Prestation prestation = new Prestation();
+		prestation.setId(10);
+		prestation.setProjets(List.of(projet));
+		when(prestationRepository.findById(10)).thenReturn(Optional.of(prestation));
+
+		mockMvc.perform(get(BASE_URL + "/findByPrestation?prestation=10")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].id").value(1));
+
+		mockMvc.perform(get(BASE_URL + "/findByPrestation?prestation=2")).andExpect(status().isNotFound());
+
+		prestation.setProjets(new ArrayList<>());
+		mockMvc.perform(get(BASE_URL + "/findByPrestation?prestation=10")).andExpect(status().isNotFound());
+
 	}
 
 }

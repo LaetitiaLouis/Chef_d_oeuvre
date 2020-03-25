@@ -5,11 +5,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,15 +38,14 @@ public class AdminControllerTest {
 	AdminRepository adminRepository;
 
 	private final Admin admin = new Admin();
-	private final String BASE_URL = "/api/admin";
+	private final String BASE_URL = "/admin";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
 	public void setUp() {
 		admin.setLogin("Nad");
 	}
-	
-	
+
 	@Test
 	public void testDelete() throws Exception {
 		this.mockMvc.perform(delete(BASE_URL + "/delete?login=Nad")).andExpect(status().isOk());
@@ -81,5 +78,15 @@ public class AdminControllerTest {
 		admin.setLogin("updateNad");
 		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(admin)))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void testCheckIfLoginExists() throws Exception {
+		when(adminRepository.existsById("login")).thenReturn(true);
+
+		this.mockMvc.perform(get(BASE_URL + "/loginExists?login=login")).andExpect(content().string("true"));
+
+		this.mockMvc.perform(get(BASE_URL + "/loginExists?login=badLogin")).andExpect(content().string("false"));
+
 	}
 }

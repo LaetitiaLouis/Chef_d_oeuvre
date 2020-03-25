@@ -27,7 +27,7 @@ import fr.laetitia.repository.ProjetRepository;
  *
  */
 @RestController
-@RequestMapping("/api/photo")
+@RequestMapping("/photo")
 @CrossOrigin("http://localhost:4200")
 public class PhotoController {
 
@@ -94,7 +94,11 @@ public class PhotoController {
 		Optional<Projet> p = projetRepository.findById(projet);
 		if (p.isPresent()) {
 			List<Photo> photos = p.get().getPhotos();
+			if (photos.isEmpty()) {
+				return HttpResponse.NOT_FOUND;
+			} else {
 			return ResponseEntity.ok(photos);
+			}
 		} else {
 			return HttpResponse.NOT_FOUND;
 		}
