@@ -25,6 +25,7 @@ public class Photo {
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private int id;
 		private String nom;
+		private String categorie;
 		private String lien;
 		@JsonIgnore
 		@ManyToOne(cascade = CascadeType.MERGE)

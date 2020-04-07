@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.laetitia.HttpResponse;
+import fr.laetitia.model.Photo;
 import fr.laetitia.model.Prestation;
 import fr.laetitia.model.Projet;
 import fr.laetitia.model.Type;
@@ -150,5 +151,15 @@ public class ProjetController {
 	public ResponseEntity<?> deleteProjet(@RequestParam int id) {
 		projetRepository.deleteById(id);
 		return ResponseEntity.ok("Projet supprimé");
+	}
+	
+	@GetMapping("/findById")
+	public ResponseEntity<?> findById(@RequestParam int id) {
+		Optional<Projet> projet = projetRepository.findById(id);
+		if (projet.isPresent()) {
+			return ResponseEntity.ok(projet.get());
+		}else {
+			return HttpResponse.NOT_FOUND;
+		}
 	}
 }

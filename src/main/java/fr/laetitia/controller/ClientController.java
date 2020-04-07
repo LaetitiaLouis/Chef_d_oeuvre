@@ -93,4 +93,12 @@ public class ClientController {
 		}
 	}
 
+	public ResponseEntity<?> findById(@RequestParam int id) {
+		Optional<Client> client = clientRepository.findById(id);
+		if (client.isPresent()) {
+			return ResponseEntity.ok(client.get());
+		} else {
+			return HttpResponse.NOT_FOUND;
+		}
+	}
 }

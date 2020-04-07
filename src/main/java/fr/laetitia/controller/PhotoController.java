@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.laetitia.HttpResponse;
 import fr.laetitia.model.Photo;
 import fr.laetitia.model.Projet;
+import fr.laetitia.model.Type;
 import fr.laetitia.repository.PhotoRepository;
 import fr.laetitia.repository.ProjetRepository;
 
@@ -103,4 +104,25 @@ public class PhotoController {
 			return HttpResponse.NOT_FOUND;
 		}
 	}
+	
+	@GetMapping("/findById")
+	public ResponseEntity<?> findById(@RequestParam int id) {
+		Optional<Photo> photo = photoRepository.findById(id);
+		if (photo.isPresent()) {
+			return ResponseEntity.ok(photo.get());
+		}else {
+			return HttpResponse.NOT_FOUND;
+		}
+	}
+	
+	@GetMapping("/findByCategorie")
+	public ResponseEntity<?> findByCategorie(@RequestParam String categorie) {
+		List<Photo> photos = photoRepository.findByCategorie(categorie);
+		if (photos.isEmpty()) {
+			return HttpResponse.NOT_FOUND;
+		} else {
+			return ResponseEntity.ok(photos);
+		}
+	}
+	
 }

@@ -38,6 +38,4 @@ public class Client {
 	private String refFacture;
 	@OneToMany(mappedBy = "client")
 	private List<Projet> projets = new ArrayList<>();
-	// private List<Prestation> prestations = new ArrayList<>();
-
 }

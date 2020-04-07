@@ -36,13 +36,13 @@ INSERT INTO projet(description, intitule, admin_login, client_id, type_id) VALUE
 ('Construction piscine', 'Piscine1', 'laur33', 3, 3);
 
 --Photo
-INSERT INTO photo(lien, nom, projet_id) VALUES
-('photo1', 'maison1', 1),
-('photo2', 'rénovation1', 2),
-('photo3', 'piscine1', 3);
+INSERT INTO photo(lien, nom, categorie, projet_id) VALUES
+('C:\\jean\\NLProjet\\src\\assets\\plan-maison-plans.fr_.jpg', 'photo1', 'accueil', 1),
+('photo2', 'rénovation1', 'présentation projet', 2),
+('photo3', 'piscine1', 'description projet', 3);
 
 --Prestation projets
 INSERT INTO prestation_projet(prestation_id, projet_id) VALUES
 (1, 1),
-(2, 1),
-(3, 1);
+(2, 3),
+(3, 2);
