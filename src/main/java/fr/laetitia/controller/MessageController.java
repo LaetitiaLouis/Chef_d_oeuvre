@@ -1,25 +1,17 @@
 package fr.laetitia.controller;
 
-import java.util.List;
-import java.util.Optional;
-
+import fr.laetitia.HttpResponse;
+import fr.laetitia.model.Message;
+import fr.laetitia.model.Projet;
+import fr.laetitia.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import fr.laetitia.HttpResponse;
-import fr.laetitia.model.Message;
-import fr.laetitia.repository.MessageRepository;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author LOUISL
@@ -40,11 +32,12 @@ public class MessageController {
 	 */
 	@GetMapping("/")
 	public ResponseEntity<?> findAll() {
-		List<Message> messages = (List<Message>) messageRepository.findAll();
-		if (messages.isEmpty()) {
-			return HttpResponse.NOT_FOUND;
-		} else {
+		Iterable<Message> messages = messageRepository.findAll();
+		if (messages.iterator().hasNext()) {
 			return ResponseEntity.ok(messages);
+		} else {
+			return HttpResponse.NOT_FOUND;
+
 		}
 	}
 
@@ -61,6 +54,7 @@ public class MessageController {
 		if (p.isPresent()) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce message existe déjà");
 		} else {
+			message.setDate(LocalDate.now());
 			return ResponseEntity.status(HttpStatus.CREATED).body(messageRepository.save(message));
 		}
 	}

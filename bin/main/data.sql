@@ -1,7 +1,7 @@
 --Admin
 INSERT INTO admin(login, password, photo, presentation) VALUES 
-( 'nagar33', '123456', '', 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'),
-( 'laur33', '987654', '', 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC');
+( 'nagar33', '123456', 'https://www.dropbox.com/s/5jqbluwjsbxuh55/photo%20Nad%C3%A8ge.jpg?dl=0', 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'),
+( 'laur33', '987654', 'https://www.dropbox.com/s/mvvv8v4cdrm28z9/Laurence%20portrait%201%20NB.jpeg?dl=0', 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC');
 
 --Client
 INSERT INTO client(nom, prenom, adresse, code_postal, ville, email, telephone, ref_devis, ref_facture) VALUES
@@ -37,9 +37,9 @@ INSERT INTO projet(description, intitule, admin_login, client_id, type_id) VALUE
 
 --Photo
 INSERT INTO photo(lien, nom, categorie, projet_id) VALUES
-('C:\\jean\\NLProjet\\src\\assets\\plan-maison-plans.fr_.jpg', 'photo1', 'accueil', 1),
-('photo2', 'rénovation1', 'présentation projet', 2),
-('photo3', 'piscine1', 'description projet', 3);
+('https://www.dropbox.com/s/g21cay0wqcjsbe7/plan-maison-plans.fr_.jpg?dl=0', 'photo1', 'accueil', 1),
+('https://www.dropbox.com/s/ow2w6kekujhwqd2/golfmarcuspointe-com-12353.jpg?dl=1', 'rénovation1', 'présentation projet', 2),
+('https://www.dropbox.com/s/yt8ww4ydhc9o89i/PROJET%204%20RENDU%20AMENAGEMENT.jpg?dl=1', 'piscine1', 'description projet', 3);
 
 --Prestation projets
 INSERT INTO prestation_projet(prestation_id, projet_id) VALUES

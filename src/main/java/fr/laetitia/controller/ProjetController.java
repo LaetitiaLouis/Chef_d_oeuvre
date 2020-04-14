@@ -2,6 +2,7 @@ package fr.laetitia.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,18 +57,19 @@ public class ProjetController {
 	 */
 	@GetMapping("/")
 	public ResponseEntity<?> findAll() {
-		List<Projet> projets = (List<Projet>) projetRepository.findAll();
-		if (projets.isEmpty()) {
-			return HttpResponse.NOT_FOUND;
-		} else {
+		Iterable<Projet> projets = projetRepository.findAll();
+		if (projets.iterator().hasNext()) {
 			return ResponseEntity.ok(projets);
+		} else {
+			return HttpResponse.NOT_FOUND;
+
 		}
 	}
 
 	/**
 	 * Modifier un projet
 	 * 
-	 * @param L'objet projet modifié en paramètre de la requête
+	 * @param 'objet projet modifié en paramètre de la requête
 	 * @return Le projet modifié s'il existe sinon un message et une erreur 404
 	 */
 	@PutMapping("/update")
@@ -83,7 +85,7 @@ public class ProjetController {
 	/**
 	 * Enregistrer un projet
 	 * 
-	 * @param Le projet dans le body de la requête
+	 *
 	 * @return Le projet crée si il n'existe pas déjà sinon un message et une erreur
 	 *         404
 	 */
@@ -104,20 +106,20 @@ public class ProjetController {
 	 * @return Une liste de projets si elle n'est pas vide sinon un message et une
 	 *         erreur 404
 	 */
-	@GetMapping("/findByType")
-	public ResponseEntity<?> findByType(@RequestParam int type) {
-		Optional<Type> t = typeRepository.findById(type);
-		if (t.isPresent()) {
-			List<Projet> projets = t.get().getProjets();
-			if (projets.isEmpty()) {
-				return HttpResponse.NOT_FOUND;
-			} else {
-				return ResponseEntity.ok(projets);
-			}
-		} else {
-			return HttpResponse.NOT_FOUND;
-		}
-	}
+//	@GetMapping("/findByType")
+//	public ResponseEntity<?> findByType(@RequestParam int type) {
+//		Optional<Type> t = typeRepository.findById(type);
+//		if (t.isPresent()) {
+//			Set<Projet> projets = t.get().getProjets();
+//			if (projets.isEmpty()) {
+//				return HttpResponse.NOT_FOUND;
+//			} else {
+//				return ResponseEntity.ok(projets);
+//			}
+//		} else {
+//			return HttpResponse.NOT_FOUND;
+//		}
+//	}
 
 	/**
 	 * Obtenir les projets par prestation
@@ -126,20 +128,20 @@ public class ProjetController {
 	 * @return Une liste de projets si elle n'est pas vide sinon un message et une
 	 *         erreur 404
 	 */
-	@GetMapping("/findByPrestation")
-	public ResponseEntity<?> findByPrestation(@RequestParam int prestation) {
-		Optional<Prestation> p = prestationRepository.findById(prestation);
-		if (p.isPresent()) {
-			List<Projet> projets = p.get().getProjets();
-			if (projets.isEmpty()) {
-				return HttpResponse.NOT_FOUND;
-			} else {
-			return ResponseEntity.ok(projets);
-			}
-		} else {
-			return HttpResponse.NOT_FOUND;
-		}
-	}
+//	@GetMapping("/findByPrestation")
+//	public ResponseEntity<?> findByPrestation(@RequestParam int prestation) {
+//		Optional<Prestation> p = prestationRepository.findById(prestation);
+//		if (p.isPresent()) {
+//			Set<Projet> projets = p.get().getProjets();
+//			if (projets.isEmpty()) {
+//				return HttpResponse.NOT_FOUND;
+//			} else {
+//			return ResponseEntity.ok(projets);
+//			}
+//		} else {
+//			return HttpResponse.NOT_FOUND;
+//		}
+//	}
 
 	/**
 	 * Supprimer un projet par son id

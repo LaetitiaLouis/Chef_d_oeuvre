@@ -1,21 +1,16 @@
 package fr.laetitia.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author LOUISL
@@ -25,7 +20,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor
 public class Projet {
 
 	@Id
@@ -33,18 +28,25 @@ public class Projet {
 	private int id;
 	private String intitule;
 	private String description;
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.MERGE)
+
+	@JsonIgnoreProperties("listeProjets")
+	@ManyToOne
 	private Admin admin;
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.MERGE)
-	private Type type;
+
+	@JsonIgnoreProperties("projet")
 	@OneToMany(mappedBy = "projet")
-	private List<Photo> photos = new ArrayList<>();
-	@ManyToMany(mappedBy = "projets")
-	private List<Prestation> prestations = new ArrayList<>();
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.MERGE)
+	private Set<Photo> photos = new HashSet<>();
+
+	@JsonIgnoreProperties("listeProjets")
+	@ManyToOne
 	private Client client;
 
+	@ManyToOne
+	private Type type;
+
+	private int photoId;
+
+//	@ManyToMany
+//	@OnDelete(action = OnDeleteAction.CASCADE)
+//	private Set<Prestation> prestations = new HashSet<>();
 }

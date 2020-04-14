@@ -1,15 +1,13 @@
 package fr.laetitia.model;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * @author LOUISL
@@ -18,15 +16,17 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Message {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String expediteur;
 	private String objet;
 	@Column(columnDefinition = "varchar(500)")
 	private String contenu;
-	private boolean client;
-	private Date date;
+	private boolean vu = false;
+	private LocalDate date;
+	@ManyToOne
+	private Client client;
 	}

@@ -1,35 +1,35 @@
 package fr.laetitia.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
 
 /**
  * @author LOUISL
- *
  */
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Photo {
 
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		private int id;
-		private String nom;
-		private String categorie;
-		private String lien;
-		@JsonIgnore
-		@ManyToOne(cascade = CascadeType.MERGE)
-		private Projet projet;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String nom;
+    private String categorie;
+    private String lien;
+
+    @JsonIgnoreProperties("photo")
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Projet projet;
 }		
 
 

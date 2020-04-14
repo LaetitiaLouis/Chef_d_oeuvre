@@ -1,20 +1,16 @@
 package fr.laetitia.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author LOUISL
@@ -24,15 +20,19 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Prestation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String intitule;
-	private String contenu;
-	@JsonIgnore
-	@ManyToMany
-	@JoinTable(name = "prestation_projet", joinColumns = @JoinColumn(name = "prestation_id"), inverseJoinColumns = @JoinColumn(name = "projet_id"))
-	private List<Projet> projets = new ArrayList<>();
+	private String categorie;
+
+//	@JsonIgnoreProperties("prestations")
+//	@ManyToMany(mappedBy = "prestations", cascade = CascadeType.DETACH)
+	@ManyToMany(cascade= CascadeType.REMOVE)
+	//@OnDelete(action = OnDeleteAction.CASCADE)
+// 	@JoinTable(name = "prestation_projet", joinColumns = @JoinColumn(name = "prestation"), inverseJoinColumns = @JoinColumn(name = "projet_id"))
+	private Set<Projet> listeProjets = new HashSet<>();
 }

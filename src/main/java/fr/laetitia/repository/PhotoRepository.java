@@ -1,11 +1,10 @@
 package fr.laetitia.repository;
 
-import java.util.List;
-
+import fr.laetitia.model.Photo;
 import org.springframework.data.repository.CrudRepository;
 
-import fr.laetitia.model.Photo;
+import java.util.Set;
 
 public interface PhotoRepository extends CrudRepository<Photo, Integer> {
-	public List<Photo> findByCategorie(String categorie);
+	Set<Photo> findByCategorie(String categorie);
 }

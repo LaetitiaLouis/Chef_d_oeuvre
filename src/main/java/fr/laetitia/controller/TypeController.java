@@ -2,6 +2,7 @@ package fr.laetitia.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,18 +37,19 @@ public class TypeController {
 	 */
 	@GetMapping("/")
 	public ResponseEntity<?> findAll() {
-		List<Type> types = (List<Type>) typeRepository.findAll();
-		if (types.isEmpty()) {
-			return HttpResponse.NOT_FOUND;
-		} else {
+		Iterable<Type> types = typeRepository.findAll();
+		if (types.iterator().hasNext()) {
 			return ResponseEntity.ok(types);
+		} else {
+			return HttpResponse.NOT_FOUND;
+
 		}
 	}
 
 	/**
 	 * Enregistrer un objet type
 	 * 
-	 * @param L'objet type dans le body de la requête
+	 *
 	 * @return L'objet type est créé s'il n'existe pas sinon un message et une
 	 *         erreur 409
 	 */

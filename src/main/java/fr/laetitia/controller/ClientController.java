@@ -2,7 +2,9 @@ package fr.laetitia.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import fr.laetitia.model.Projet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,13 +42,23 @@ public class ClientController {
 	 */
 	@GetMapping("/")
 	public ResponseEntity<?> findAll() {
-		List<Client> clients = (List<Client>) clientRepository.findAll();
-		if (clients.isEmpty()) {
-			return HttpResponse.NOT_FOUND;
-		} else {
+		Iterable<Client> clients = clientRepository.findAll();
+		if (clients.iterator().hasNext()) {
 			return ResponseEntity.ok(clients);
+		} else {
+			return HttpResponse.NOT_FOUND;
+
 		}
 	}
+//	@GetMapping("/")
+//	public ResponseEntity<?> findAll() {
+//		Set<Client> clients = (Set<Client>) clientRepository.findAll();
+//		if (clients.isEmpty()) {
+//			return HttpResponse.NOT_FOUND;
+//		} else {
+//			return ResponseEntity.ok(clients);
+//		}
+//	}
 
 	/**
 	 * Enregistrer un nouveau client

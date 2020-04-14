@@ -1,27 +1,18 @@
 package fr.laetitia.controller;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import fr.laetitia.HttpResponse;
 import fr.laetitia.model.Photo;
 import fr.laetitia.model.Projet;
-import fr.laetitia.model.Type;
 import fr.laetitia.repository.PhotoRepository;
 import fr.laetitia.repository.ProjetRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author LOUISL
@@ -57,7 +48,7 @@ public class PhotoController {
 	/**
 	 * Enregistrer un objet photo
 	 * 
-	 * @param L'objet photo dans le body de la requête
+	 * @param l'objet photo dans le body de la requête
 	 * @return L'objet photo est créé si l'id n'existe pas sinon un message et une
 	 *         erreur 409
 	 */
@@ -94,7 +85,7 @@ public class PhotoController {
 	public ResponseEntity<?> findByProjet(@RequestParam int projet) {
 		Optional<Projet> p = projetRepository.findById(projet);
 		if (p.isPresent()) {
-			List<Photo> photos = p.get().getPhotos();
+			Set<Photo> photos = p.get().getPhotos();
 			if (photos.isEmpty()) {
 				return HttpResponse.NOT_FOUND;
 			} else {
@@ -117,7 +108,7 @@ public class PhotoController {
 	
 	@GetMapping("/findByCategorie")
 	public ResponseEntity<?> findByCategorie(@RequestParam String categorie) {
-		List<Photo> photos = photoRepository.findByCategorie(categorie);
+		Set<Photo> photos = photoRepository.findByCategorie(categorie);
 		if (photos.isEmpty()) {
 			return HttpResponse.NOT_FOUND;
 		} else {

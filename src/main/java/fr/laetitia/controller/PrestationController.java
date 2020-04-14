@@ -2,6 +2,7 @@ package fr.laetitia.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,10 +43,21 @@ public class PrestationController {
 	@Autowired
 	ClientRepository clientRepository;
 
+
+	@GetMapping("/")
+	public ResponseEntity<?> findAll() {
+		Iterable<Prestation> prestations = prestationRepository.findAll();
+		if (prestations.iterator().hasNext()) {
+			return ResponseEntity.ok(prestations);
+		} else {
+			return HttpResponse.NOT_FOUND;
+
+		}
+	}
 	/**
 	 * Enregistrer une nouvelle prestation
 	 * 
-	 * @param L'objet prestation dans le body de la requête
+	 * @param l'objet prestation dans le body de la requête
 	 * @return L'objet créé ou une erreur 409 si elle existe déjà
 	 */
 	@PostMapping("/new")
@@ -94,20 +106,20 @@ public class PrestationController {
 	 * @return Une liste de prestations si elle n'est pas vide sinon un message et
 	 *         une erreur 404
 	 */
-	@GetMapping("/findByProjet")
-	public ResponseEntity<?> findByProjet(@RequestParam int projet) {
-		Optional<Projet> p = projetRepository.findById(projet);
-		if (p.isPresent()) {
-			List<Prestation> prestations = p.get().getPrestations();
-			if (prestations.isEmpty()) {
-				return HttpResponse.NOT_FOUND;
-			} else {
-				return ResponseEntity.ok(prestations);
-			}
-		} else {
-			return HttpResponse.NOT_FOUND;
-		}
-	}
+//	@GetMapping("/findByProjet")
+//	public ResponseEntity<?> findByProjet(@RequestParam int projet) {
+//		Optional<Projet> p = projetRepository.findById(projet);
+//		if (p.isPresent()) {
+//			Set<Prestation> prestations = p.get().getPrestations();
+//			if (prestations.isEmpty()) {
+//				return HttpResponse.NOT_FOUND;
+//			} else {
+//				return ResponseEntity.ok(prestations);
+//			}
+//		} else {
+//			return HttpResponse.NOT_FOUND;
+//		}
+//	}
 
 //	 /**
 //	 * Obtenir les prestations par client

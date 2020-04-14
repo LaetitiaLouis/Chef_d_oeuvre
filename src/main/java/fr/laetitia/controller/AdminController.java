@@ -1,7 +1,9 @@
 package fr.laetitia.controller;
 
 import java.util.Optional;
+import java.util.Set;
 
+import fr.laetitia.model.Projet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,18 @@ public class AdminController {
 	@Autowired
 	AdminRepository adminRepository;
 
+
+	@GetMapping("/")
+	public ResponseEntity<?> findAll() {
+		Iterable<Admin> admins = adminRepository.findAll();
+		if (admins.iterator().hasNext()) {
+			return ResponseEntity.ok(admins);
+		} else {
+			return HttpResponse.NOT_FOUND;
+
+		}
+	}
+
 	/**
 	 * Enregistrer un nouvel administrateur
 	 * 
@@ -51,7 +65,7 @@ public class AdminController {
 	/**
 	 * Vérifier si un administrateur avec le login proposé existe déjà
 	 * 
-	 * @param Le login d'un administrateur en paramètre de la requête
+	 * @param login d'un administrateur en paramètre de la requête
 	 * @return true si il existe sinon false
 	 */
 	@GetMapping("/loginExists")
