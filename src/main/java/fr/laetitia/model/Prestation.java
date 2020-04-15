@@ -31,7 +31,7 @@ public class Prestation {
 
 //	@JsonIgnoreProperties("prestations")
 //	@ManyToMany(mappedBy = "prestations", cascade = CascadeType.DETACH)
-	@ManyToMany(cascade= CascadeType.REMOVE)
+	@ManyToMany
 	//@OnDelete(action = OnDeleteAction.CASCADE)
 // 	@JoinTable(name = "prestation_projet", joinColumns = @JoinColumn(name = "prestation"), inverseJoinColumns = @JoinColumn(name = "projet_id"))
 	private Set<Projet> listeProjets = new HashSet<>();

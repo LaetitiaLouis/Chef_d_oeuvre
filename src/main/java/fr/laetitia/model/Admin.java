@@ -14,12 +14,11 @@ import java.util.Set;
  * @author LOUISL
  *
  */
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Admin extends Projet {
+public class Admin  {
 
 	@Id
 	@Column(unique = true)

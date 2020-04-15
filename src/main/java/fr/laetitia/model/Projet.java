@@ -35,6 +35,7 @@ public class Projet {
 
 	@JsonIgnoreProperties("projet")
 	@OneToMany(mappedBy = "projet")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Photo> photos = new HashSet<>();
 
 	@JsonIgnoreProperties("listeProjets")
@@ -46,7 +47,7 @@ public class Projet {
 
 	private int photoId;
 
-//	@ManyToMany
-//	@OnDelete(action = OnDeleteAction.CASCADE)
-//	private Set<Prestation> prestations = new HashSet<>();
+	@ManyToMany(mappedBy = "listeProjets")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Set<Prestation> prestations = new HashSet<>();
 }

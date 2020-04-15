@@ -28,7 +28,6 @@ public class Photo {
 
     @JsonIgnoreProperties("photo")
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Projet projet;
 }		
 
