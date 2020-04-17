@@ -40,7 +40,7 @@ public class TypeControllerTest {
 	TypeRepository typeRepository;
 
 	private final Type type = new Type();
-	private final String BASE_URL = "/type";
+	private final String BASE_URL = "/types";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -53,7 +53,7 @@ public class TypeControllerTest {
 	public void testGetAll() throws Exception {
 		when(typeRepository.findAll()).thenReturn(List.of(type));
 
-		mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_URL)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].libelle").value("piscine"));
 
 		when(typeRepository.findAll()).thenReturn(new ArrayList<>());
@@ -62,7 +62,7 @@ public class TypeControllerTest {
 
 	@Test
 	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL + "/delete?id=1")).andExpect(status().isOk());
+		this.mockMvc.perform(delete(BASE_URL + "/1")).andExpect(status().isOk());
 	}
 
 	@Test
@@ -70,11 +70,11 @@ public class TypeControllerTest {
 		when(typeRepository.save(type)).thenReturn(type);
 		when(typeRepository.findById(1)).thenReturn(Optional.of(type));
 
-		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(type)))
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(type)))
 				.andExpect(status().isCreated());
 
 		type.setId(2);
-		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(type)))
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(type)))
 				.andExpect(status().isNotFound());
 	}
 
@@ -85,12 +85,12 @@ public class TypeControllerTest {
 		type.setId(2);
 
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(type)))
+				post(BASE_URL).accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(type)))
 				.andExpect(status().isCreated());
 
 		type.setId(1);
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(type)))
+				post(BASE_URL).accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(type)))
 				.andExpect(status().isConflict());
 	}
 

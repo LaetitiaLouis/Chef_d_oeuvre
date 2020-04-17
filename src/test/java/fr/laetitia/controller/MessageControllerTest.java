@@ -41,7 +41,7 @@ public class MessageControllerTest {
 	private MessageRepository messageRepository;
 
 	private final Message message = new Message();
-	private final String BASE_URL = "/message";
+	private final String BASE_URL = "/messages";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -51,18 +51,18 @@ public class MessageControllerTest {
 
 	@Test
 	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL + "/delete?id=1")).andExpect(status().isOk());
+		this.mockMvc.perform(delete(BASE_URL)).andExpect(status().isOk());
 	}
 
 	@Test
 	public void testGetAll() throws Exception {
 		when(messageRepository.findAll()).thenReturn(List.of(message));
 
-		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk()).andExpect(jsonPath("$.[0].id").value(1));
+		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isOk()).andExpect(jsonPath("$.[0].id").value(1));
 
 		when(this.messageRepository.findAll()).thenReturn(new ArrayList<>());
 
-		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());
+		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -71,11 +71,11 @@ public class MessageControllerTest {
 		when(messageRepository.findById(1)).thenReturn(Optional.of(message));
 		message.setId(2);
 
-		mockMvc.perform(post(BASE_URL + "/new").accept(JSON).contentType(JSON)
+		mockMvc.perform(post(BASE_URL).accept(JSON).contentType(JSON)
 				.content(objectMapper.writeValueAsString(message))).andExpect(status().isCreated());
 
 		message.setId(1);
-		mockMvc.perform(post(BASE_URL + "/new").accept(JSON).contentType(JSON)
+		mockMvc.perform(post(BASE_URL).accept(JSON).contentType(JSON)
 				.content(objectMapper.writeValueAsString(message))).andExpect(status().isConflict());
 	}
 
@@ -84,11 +84,11 @@ public class MessageControllerTest {
 		when(messageRepository.save(message)).thenReturn(message);
 		when(messageRepository.findById(1)).thenReturn(Optional.of(message));
 
-		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(message)))
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(message)))
 				.andExpect(status().isCreated());
 
 		message.setId(2);
-		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(message)))
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(message)))
 				.andExpect(status().isNotFound());
 	}
 }

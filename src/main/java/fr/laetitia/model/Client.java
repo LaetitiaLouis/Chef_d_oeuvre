@@ -40,6 +40,37 @@ public class Client {
 
 	@JsonIgnoreProperties("client")
 	@OneToMany(mappedBy = "client")
-//	@Column(nullable = true)
 	private Set<Projet> listeProjets = new HashSet<>();
+
+	public Client(String nom, String prenom, String adresse, String codePostal, String ville, String email, String telephone, String refDevis, String refFacture){
+		this.nom = nom;
+		this.prenom = prenom;
+		this.adresse = adresse;
+		this.codePostal = codePostal;
+		this.ville = ville;
+		this.telephone = telephone;
+		this.email = email;
+		this.refDevis = refDevis;
+		this.refFacture = refFacture;
+	}
+
+	public void addProjet(Projet projet) {
+		listeProjets.add(projet);
+	}
+
+//	@Override
+//	public String toString() {
+//		return "Client{" +
+//				"id=" + id +
+//				", nom='" + nom + '\'' +
+//				", prenom='" + prenom + '\'' +
+//				", adresse='" + adresse + '\'' +
+//				", codePostal='" + codePostal + '\'' +
+//				", ville='" + ville + '\'' +
+//				", email='" + email + '\'' +
+//				", telephone='" + telephone + '\'' +
+//				", refDevis='" + refDevis + '\'' +
+//				", refFacture='" + refFacture + '\'' +
+//				'}';
+//	}
 }

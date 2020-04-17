@@ -1,116 +1,86 @@
 package fr.laetitia.controller;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import fr.laetitia.model.Projet;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import fr.laetitia.HttpResponse;
 import fr.laetitia.model.Client;
 import fr.laetitia.repository.ClientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * @author LOUISL
- *
  */
 
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/clients")
 @CrossOrigin("http://localhost:4200")
 public class ClientController {
 
-	@Autowired
-	ClientRepository clientRepository;
+    @Autowired
+    ClientRepository clientRepository;
 
-	/**
-	 * Afficher la liste des clients
-	 * 
-	 * return la liste de clients si elle n'est pas vide sinon une erreur 404
-	 */
-	@GetMapping("/")
-	public ResponseEntity<?> findAll() {
-		Iterable<Client> clients = clientRepository.findAll();
-		if (clients.iterator().hasNext()) {
-			return ResponseEntity.ok(clients);
-		} else {
-			return HttpResponse.NOT_FOUND;
+    /**
+     * Afficher la liste des clients
+     */
+    @GetMapping
+    public ResponseEntity<?> findAll() {
+        Iterable<Client> clients = clientRepository.findAll();
+        if (clients.iterator().hasNext()) {
+            return ResponseEntity.ok(clients);
+        } else {
+            return HttpResponse.NOT_FOUND;
 
-		}
-	}
-//	@GetMapping("/")
-//	public ResponseEntity<?> findAll() {
-//		Set<Client> clients = (Set<Client>) clientRepository.findAll();
-//		if (clients.isEmpty()) {
-//			return HttpResponse.NOT_FOUND;
-//		} else {
-//			return ResponseEntity.ok(clients);
-//		}
-//	}
+        }
+    }
 
-	/**
-	 * Enregistrer un nouveau client
-	 * 
-	 * @param L'objet client dans le body de la requête
-	 * @return L'objet créé ou une erreur 409 si le client existe déjà
-	 */
-	@PostMapping("/new")
-	public ResponseEntity<?> create(@RequestBody Client client) {
-		Optional<Client> maybeClient = clientRepository.findById(client.getId());
-		if (maybeClient.isPresent()) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce client existe déjà");
-		} else {
-			return ResponseEntity.status(HttpStatus.CREATED).body(clientRepository.save(client));
-		}
-	}
+    /**
+     * Enregistrer un nouveau client
+     */
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody Client client) {
+        Optional<Client> maybeClient = clientRepository.findById(client.getId());
+        if (maybeClient.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce client existe déjà");
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(clientRepository.save(client));
+        }
+    }
 
-	/**
-	 * Supprimer un client par son id
-	 * 
-	 * @param L'id du client à supprimer
-	 * @return Un message de confirmation
-	 */
-	@DeleteMapping("/delete")
-	public ResponseEntity<?> deleteClient(@RequestParam int id) {
-		clientRepository.deleteById(id);
-		return ResponseEntity.ok("Client supprimé");
-	}
+    /**
+     * Supprimer un client par son id
+     */
+    @DeleteMapping ("/{id}")
+    public ResponseEntity<?> deleteClient(@PathVariable int id) {
+        clientRepository.deleteById(id);
+        return ResponseEntity.ok("Client supprimé");
+    }
 
-	/**
-	 * Modifier un client
-	 * 
-	 * @param L'objet client dans le body de la requête
-	 * @return L'objet client modifié ou une erreur 404 et un message s'il n'a pas
-	 *         été trouvé en base de donnée
-	 */
-	@PutMapping("/update")
-	public ResponseEntity<?> update(@RequestBody Client client) {
-		Optional<Client> maybeClient = clientRepository.findById(client.getId());
-		if (maybeClient.isPresent()) {
-			return ResponseEntity.status(HttpStatus.CREATED).body((clientRepository.save(client)));
-		} else {
-			return HttpResponse.NOT_FOUND;
-		}
-	}
+    /**
+     * Modifier un client
+     */
+    @PutMapping
+    public ResponseEntity<?> update(@RequestBody Client client) {
+        Optional<Client> maybeClient = clientRepository.findById(client.getId());
+        if (maybeClient.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body((clientRepository.save(client)));
+        } else {
+            return HttpResponse.NOT_FOUND;
+        }
+    }
 
-	public ResponseEntity<?> findById(@RequestParam int id) {
-		Optional<Client> client = clientRepository.findById(id);
-		if (client.isPresent()) {
-			return ResponseEntity.ok(client.get());
-		} else {
-			return HttpResponse.NOT_FOUND;
-		}
-	}
+    /**
+     * Afficher un client via son id
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable int id) {
+        Optional<Client> client = clientRepository.findById(id);
+        if (client.isPresent()) {
+            return ResponseEntity.ok(client.get());
+        } else {
+            return HttpResponse.NOT_FOUND;
+        }
+    }
 }

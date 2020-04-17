@@ -4,6 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import fr.laetitia.model.Admin;
 
-public interface AdminRepository extends CrudRepository<Admin, String>{
+import java.util.Optional;
 
+public interface AdminRepository extends CrudRepository<Admin, String>{
+    Optional<Admin> findByLogin (String login);
 }

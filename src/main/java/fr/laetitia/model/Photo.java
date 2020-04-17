@@ -26,9 +26,16 @@ public class Photo {
     private String categorie;
     private String lien;
 
-    @JsonIgnoreProperties("photo")
+    @JsonIgnoreProperties("photos")
     @ManyToOne
     private Projet projet;
-}		
+
+    public Photo(String nom, String categorie, String lien, Projet projet) {
+        this.nom = nom;
+        this.categorie = categorie;
+        this.lien = lien;
+        this.projet = projet;
+    }
+}
 
 

@@ -8,9 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +43,7 @@ public class PrestationControllerTest {
 	ProjetRepository projetRepository;
 
 	private final Prestation prestation = new Prestation();
-	private final String BASE_URL = "/prestation";
+	private final String BASE_URL = "/prestations";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -55,7 +53,7 @@ public class PrestationControllerTest {
 
 	@Test
 	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL + "/delete?id=1")).andExpect(status().isOk());
+		this.mockMvc.perform(delete(BASE_URL + "/1")).andExpect(status().isOk());
 	}
 
 	@Test
@@ -64,11 +62,11 @@ public class PrestationControllerTest {
 		when(prestationRepository.findById(1)).thenReturn(Optional.of(prestation));
 		prestation.setId(2);
 
-		mockMvc.perform(post(BASE_URL + "/new").accept(JSON).contentType(JSON)
+		mockMvc.perform(post(BASE_URL).accept(JSON).contentType(JSON)
 				.content(objectMapper.writeValueAsString(prestation))).andExpect(status().isCreated());
 
 		prestation.setId(1);
-		mockMvc.perform(post(BASE_URL + "/new").accept(JSON).contentType(JSON)
+		mockMvc.perform(post(BASE_URL).accept(JSON).contentType(JSON)
 				.content(objectMapper.writeValueAsString(prestation))).andExpect(status().isConflict());
 	}
 
@@ -78,12 +76,12 @@ public class PrestationControllerTest {
 		when(prestationRepository.findById(1)).thenReturn(Optional.of(prestation));
 
 		mockMvc.perform(
-				put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(prestation)))
+				put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(prestation)))
 				.andExpect(status().isCreated());
 
 		prestation.setId(2);
 		mockMvc.perform(
-				put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(prestation)))
+				put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(prestation)))
 				.andExpect(status().isNotFound());
 	}
 
@@ -91,16 +89,16 @@ public class PrestationControllerTest {
 	public void testFindByProjet() throws Exception {
 		Projet projet = new Projet();
 		projet.setId(10);
-		projet.setPrestations(List.of(prestation));
+		projet.setPrestations(Set.of(prestation));
 		when(projetRepository.findById(10)).thenReturn(Optional.of(projet));
 
-		mockMvc.perform(get(BASE_URL + "/findByProjet?projet=10")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0]id").value(1));
 
-		mockMvc.perform(get(BASE_URL + "/findByProjet?projet=2")).andExpect(status().isNotFound());
+		mockMvc.perform(get(BASE_URL + "/2")).andExpect(status().isNotFound());
 
-		projet.setPrestations(new ArrayList<>());
-		mockMvc.perform(get(BASE_URL + "/findByProjet?projet=10")).andExpect(status().isNotFound());
+		projet.setPrestations(new HashSet<>());
+		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isNotFound());
 	}
 
 }

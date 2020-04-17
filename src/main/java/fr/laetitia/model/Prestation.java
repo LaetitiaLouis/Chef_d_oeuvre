@@ -1,12 +1,10 @@
 package fr.laetitia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -14,7 +12,6 @@ import java.util.Set;
 
 /**
  * @author LOUISL
- *
  */
 
 @Entity
@@ -23,16 +20,22 @@ import java.util.Set;
 @NoArgsConstructor
 public class Prestation {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String intitule;
-	private String categorie;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String intitule;
+    private String categorie;
 
-//	@JsonIgnoreProperties("prestations")
-//	@ManyToMany(mappedBy = "prestations", cascade = CascadeType.DETACH)
-	@ManyToMany
-	//@OnDelete(action = OnDeleteAction.CASCADE)
-// 	@JoinTable(name = "prestation_projet", joinColumns = @JoinColumn(name = "prestation"), inverseJoinColumns = @JoinColumn(name = "projet_id"))
-	private Set<Projet> listeProjets = new HashSet<>();
+//  @JsonIgnoreProperties("prestations")
+    @ManyToMany
+    private Set<Projet> listeProjets = new HashSet<>();
+
+    public Prestation(String intitule, String categorie) {
+        this.intitule = intitule;
+        this.categorie = categorie;
+    }
+
+    public void addProjet(Projet projet) {
+        listeProjets.add(projet);
+    }
 }

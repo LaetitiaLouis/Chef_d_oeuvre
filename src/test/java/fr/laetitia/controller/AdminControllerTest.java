@@ -38,7 +38,7 @@ public class AdminControllerTest {
 	AdminRepository adminRepository;
 
 	private final Admin admin = new Admin();
-	private final String BASE_URL = "/admin";
+	private final String BASE_URL = "/admins";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -48,7 +48,7 @@ public class AdminControllerTest {
 
 	@Test
 	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL + "/delete?login=Nad")).andExpect(status().isOk());
+		this.mockMvc.perform(delete(BASE_URL + "login=Nad")).andExpect(status().isOk());
 	}
 
 	@Test
@@ -58,12 +58,12 @@ public class AdminControllerTest {
 		admin.setLogin("New");
 
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(admin)))
+				post(BASE_URL).accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(admin)))
 				.andExpect(status().isCreated());
 
 		admin.setLogin("Nad");
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(admin)))
+				post(BASE_URL).accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(admin)))
 				.andExpect(status().isConflict());
 	}
 
@@ -72,11 +72,11 @@ public class AdminControllerTest {
 		when(adminRepository.save(admin)).thenReturn(admin);
 		when(adminRepository.findById("Nad")).thenReturn(Optional.of(admin));
 
-		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(admin)))
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(admin)))
 				.andExpect(status().isCreated());
 
 		admin.setLogin("updateNad");
-		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(admin)))
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(admin)))
 				.andExpect(status().isNotFound());
 	}
 
@@ -84,9 +84,9 @@ public class AdminControllerTest {
 	public void testCheckIfLoginExists() throws Exception {
 		when(adminRepository.existsById("login")).thenReturn(true);
 
-		this.mockMvc.perform(get(BASE_URL + "/loginExists?login=login")).andExpect(content().string("true"));
+		this.mockMvc.perform(get(BASE_URL + "login")).andExpect(content().string("true"));
 
-		this.mockMvc.perform(get(BASE_URL + "/loginExists?login=badLogin")).andExpect(content().string("false"));
+		this.mockMvc.perform(get(BASE_URL + "badLogin")).andExpect(content().string("false"));
 
 	}
 }

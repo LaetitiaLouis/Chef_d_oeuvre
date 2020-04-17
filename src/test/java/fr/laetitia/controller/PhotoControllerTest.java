@@ -7,9 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +41,7 @@ public class PhotoControllerTest {
 	private ProjetRepository projetRepository;
 	
 	private final Photo photo = new Photo();
-	private final String BASE_URL = "/photo";
+	private final String BASE_URL = "/photos";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -53,7 +51,7 @@ public class PhotoControllerTest {
 
 	@Test
 	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL + "/delete?id=1")).andExpect(status().isOk());
+		this.mockMvc.perform(delete(BASE_URL)).andExpect(status().isOk());
 	}
 
 	@Test
@@ -63,12 +61,12 @@ public class PhotoControllerTest {
 		photo.setId(2);
 
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(photo)))
+				post(BASE_URL).accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(photo)))
 				.andExpect(status().isCreated());
 
 		photo.setId(1);
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(photo)))
+				post(BASE_URL).accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(photo)))
 				.andExpect(status().isConflict());
 	}
 
@@ -76,16 +74,16 @@ public class PhotoControllerTest {
 	public void testFindByProjet() throws Exception {
 		Projet projet = new Projet();
 		projet.setId(10);
-		projet.setPhotos(List.of(photo));
+		projet.setPhotos(Set.of(photo));
 		when(projetRepository.findById(10)).thenReturn(Optional.of(projet));
 
-		mockMvc.perform(get(BASE_URL + "/findByProjet?projet=10")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].id").value(1));
 
-		mockMvc.perform(get(BASE_URL + "/findByProjet?projet=2")).andExpect(status().isNotFound());
+		mockMvc.perform(get(BASE_URL + "/2")).andExpect(status().isNotFound());
 
-		projet.setPhotos(new ArrayList<>());
-		mockMvc.perform(get(BASE_URL + "/findByProjet?projet=10")).andExpect(status().isNotFound());
+		projet.setPhotos(new HashSet<>());
+		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isNotFound());
 	}
 
 	@Test

@@ -40,7 +40,7 @@ public class ClientControllerTest {
 	ClientRepository clientRepository;
 	
 	private final Client client = new Client();
-	private final String BASE_URL = "/client";
+	private final String BASE_URL = "/clients";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
 
 	@BeforeEach
@@ -52,18 +52,18 @@ public class ClientControllerTest {
 	public void testGetAll() throws Exception {
 		when(clientRepository.findAll()).thenReturn(List.of(client));
 
-		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isOk())
+		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].id").value(1));
 
 		when(this.clientRepository.findAll()).thenReturn(new ArrayList<>());
 
-		this.mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());
+		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isNotFound());
 	}
 
 	
 	@Test
 	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL + "/delete?id=1")).andExpect(status().isOk());
+		this.mockMvc.perform(delete(BASE_URL)).andExpect(status().isOk());
 	}
 
 	@Test
@@ -73,12 +73,12 @@ public class ClientControllerTest {
 		client.setId(2);
 
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(client)))
+				post(BASE_URL).accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(client)))
 				.andExpect(status().isCreated());
 
 		client.setId(1);
 		mockMvc.perform(
-				post(BASE_URL + "/new").accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(client)))
+				post(BASE_URL).accept(JSON).contentType(JSON).content(objectMapper.writeValueAsString(client)))
 				.andExpect(status().isConflict());
 	}
 
@@ -87,11 +87,11 @@ public class ClientControllerTest {
 		when(clientRepository.save(client)).thenReturn(client);
 		when(clientRepository.findById(1)).thenReturn(Optional.of(client));
 
-		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(client)))
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(client)))
 				.andExpect(status().isCreated());
 
 		client.setId(2);
-		mockMvc.perform(put(BASE_URL + "/update").contentType(JSON).content(objectMapper.writeValueAsString(client)))
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(client)))
 				.andExpect(status().isNotFound());
 	}
 
