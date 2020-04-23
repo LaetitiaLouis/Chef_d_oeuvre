@@ -1,5 +1,6 @@
 package fr.laetitia.security;
 
+import fr.laetitia.model.Admin;
 import fr.laetitia.services.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -29,7 +30,7 @@ public class JwtTokenProvider {
 
     //valeur par défaut
     @Value("${security.jwt.token.expire-length}")
-    private long validityInMilliseconds; //=1h
+    private long validityInMilliseconds = 36000000; //=10h
 
 
     @Autowired
@@ -51,14 +52,18 @@ public class JwtTokenProvider {
      * "iat" pour date du jour
      * "exp" pour date du jour + validityTime
      */
-    public String createToken(String login, Collection<? extends GrantedAuthority> roles) {
-        Claims claims = Jwts.claims().setSubject(login);
-        claims.put("auth", roles.stream().map(s -> s.getAuthority()).filter(Objects::nonNull).collect(Collectors.toList()));
+    public String createToken(Admin admin) {//mettre adin en parametre et enlever login..
+        Claims claims = Jwts.claims().setSubject(admin.getLogin());
+        claims.put("auth", admin.getAuthorities().stream().map(s -> s.getAuthority()).filter(Objects::nonNull).collect(Collectors.toList()));
+        claims.put("photo", admin.getPhoto());
+        claims.put("prenom",admin.getPrenom());
+        claims.put("presentation", admin.getPresentation());
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
+                .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)

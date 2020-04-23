@@ -8,6 +8,7 @@ import fr.laetitia.repository.ProjetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,6 +59,7 @@ public class PhotoController {
     /**
      * Supprimer une photo par son id
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping ("/{id}")
     public ResponseEntity<?> deletePhoto(@PathVariable int id) {
         photoRepository.deleteById(id);
@@ -68,14 +70,14 @@ public class PhotoController {
      * Obtenir la liste des photos d'un projet
      */
     @GetMapping("/projets/{projetId}")
-    public ResponseEntity<?> findByProjet(@PathVariable int projet) {
-        Optional<Projet> p = projetRepository.findById(projet);
+    public ResponseEntity<?> findByProjet(@PathVariable int projetId) {
+        Optional<Projet> p = projetRepository.findById(projetId);
         if (p.isPresent()) {
-            Set<Photo> photos = p.get().getPhotos();
-            if (photos.isEmpty()) {
+            Set<Photo> listePhotos = p.get().getPhotos();
+            if (listePhotos.isEmpty()) {
                 return HttpResponse.NOT_FOUND;
             } else {
-                return ResponseEntity.ok(photos);
+                return ResponseEntity.ok(listePhotos);
             }
         } else {
             return HttpResponse.NOT_FOUND;

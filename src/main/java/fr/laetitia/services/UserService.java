@@ -35,7 +35,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @JsonIgnore
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         Optional<Admin> admin = adminRepository.findByLogin(login);
@@ -49,7 +48,8 @@ public class UserService implements UserDetailsService {
     public String signin(String login, String password) throws BadCredentialsException {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-            return jwtTokenProvider.createToken(login, adminRepository.findByLogin(login).get().getAuthorities());
+           Admin admin = adminRepository.findByLogin(login).get();
+            return jwtTokenProvider.createToken(admin);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Login invalide");
         }

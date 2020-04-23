@@ -1,7 +1,7 @@
 --Admin
-INSERT INTO admin(login, compte_valide, password, photo, presentation, role) VALUES
-( 'nagar33',true, '123456', 'https://www.dropbox.com/s/i51xujhsfm1yera/photo%20Nad%C3%A8ge.jpg?dl=1', 'BBBBBBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBB BBBBBBBBBBBBBBB BBBBBBBBBBBBBBB', 'ADMIN'),
-( 'laur33', true, '987654', 'https://www.dropbox.com/s/1wuvh05xq9uh7jf/Laurence%20portrait%201%20NB.jpeg?dl=1', 'CCCCCCCCCCCC CCCCCCCCCCCC CCCCCCCCCCCCCCC CCCCCCCCCCCCCCCC CCCCCCCCCCCCCCC CCCCCCCCCCCCC','ADMIN');
+INSERT INTO admin(login, compte_valide, password, photo, presentation, role, prenom) VALUES
+( 'nagar33',true, '$2y$10$QRASxzQWKUdzWTbTAFrZIOm5AqvCRBmWI6UHRAshWs.PTlC39bWjO', 'https://www.dropbox.com/s/i51xujhsfm1yera/photo%20Nad%C3%A8ge.jpg?dl=1', 'BBBBBBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBB BBBBBBBBBBBBBBB BBBBBBBBBBBBBBB', 'ADMIN', 'Nadège'),
+( 'laur33', true, '987654', 'https://www.dropbox.com/s/1wuvh05xq9uh7jf/Laurence%20portrait%201%20NB.jpeg?dl=1', 'CCCCCCCCCCCC CCCCCCCCCCCC CCCCCCCCCCCCCCC CCCCCCCCCCCCCCCC CCCCCCCCCCCCCCC CCCCCCCCCCCCC','ADMIN', 'Laurence');
 
 --Client
 INSERT INTO client(nom, prenom, adresse, code_postal, ville, email, telephone, ref_devis, ref_facture) VALUES
@@ -50,7 +50,7 @@ INSERT INTO photo(lien, nom, categorie, projet_id) VALUES
 ('https://www.dropbox.com/s/rxvun9vcujbpxwy/DemiNiveau_petit-01-Avant.jpg?dl=1', 'photo1', 'accueil', 1),
 ('https://www.dropbox.com/s/ld6zimvevcjgwoy/golfmarcuspointe-com-12353.jpg?dl=1', 'rénovation1', 'projet', 2),
 ('https://www.dropbox.com/s/guvo26lwax2lizu/plan-maison-plans.fr_.jpg?dl=1', 'piscine1', 'projet', 3),
-('https://www.dropbox.com/s/mag53qpigykn50f/photo%207%20NB.jpeg?dl=1', 'plans', 'carousel', null ),
+('https://www.dropbox.com/s/tfizlynee8y5yvt/carousel.jpeg?dl=1', 'plans', 'carousel', null ),
 ('https://www.dropbox.com/s/bj39us6woanjwx1/IMG_1707.jpg?dl=1', 'photo', 'carousel', null ),
 ('https://www.dropbox.com/s/hl84s7m61lk4sxh/image%20croquis%203.JPG?dl=1', 'croquis', 'carousel', null );
 

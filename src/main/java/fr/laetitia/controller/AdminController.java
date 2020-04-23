@@ -2,6 +2,7 @@ package fr.laetitia.controller;
 
 import fr.laetitia.HttpResponse;
 import fr.laetitia.model.Admin;
+import fr.laetitia.model.Client;
 import fr.laetitia.model.JsonWebToken;
 import fr.laetitia.repository.AdminRepository;
 import fr.laetitia.services.UserService;
@@ -69,32 +70,32 @@ public class AdminController {
         }
     }
 
-    /**
-     * Supprimer un administrateur par son id
-     */
-    @DeleteMapping ("/{id}")
-    public ResponseEntity<?> deleteAdmin(@PathVariable String login) {
-        adminRepository.deleteById(login);
-        return ResponseEntity.ok("Administrateur supprimé");
-    }
+//    /**
+//     * Supprimer un administrateur par son id
+//     */
+//    @DeleteMapping ("/{id}")
+//    public ResponseEntity<?> deleteAdmin(@PathVariable String login) {
+//        adminRepository.deleteById(login);
+//        return ResponseEntity.ok("Administrateur supprimé");
+//    }
 
     /**
      * ajoute un admin dans la BDD
+     *
      * @param admin
      * @return
      */
     @PostMapping("/sign-up")
-    public ResponseEntity<Admin> signup(@RequestBody Admin admin){
+    public ResponseEntity<Admin> signup(@RequestBody Admin admin) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(admin));
     }
 
-	/**
+    /**
      * connecte un administrateur
-     *
      */
-	@PostMapping("/sign-in")
-	public ResponseEntity<JsonWebToken> signin(@RequestBody Admin admin) {
-		return ResponseEntity.ok(new JsonWebToken(userService.signin(admin.getLogin(), admin.getPassword())));
+    @PostMapping("/sign-in")
+    public ResponseEntity<JsonWebToken> signin(@RequestBody Admin admin) {
+        return ResponseEntity.ok(new JsonWebToken(userService.signin(admin.getLogin(), admin.getPassword())));
 
 
 //
@@ -107,8 +108,18 @@ public class AdminController {
 //			}
 //		} else {
 //			return HttpResponse.NOT_FOUND;
-		}
-	}
+    }
+
+    @GetMapping("/{login}")
+    public ResponseEntity<?> findByLogin(@PathVariable String login) {
+        Optional<Admin> admin = adminRepository.findByLogin(login);
+        if (admin.isPresent()) {
+            return ResponseEntity.ok(admin.get());
+        } else {
+            return HttpResponse.NOT_FOUND;
+        }
+    }
+}
 
 
 

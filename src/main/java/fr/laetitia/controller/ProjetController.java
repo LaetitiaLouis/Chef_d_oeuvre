@@ -1,13 +1,11 @@
 package fr.laetitia.controller;
 
 import fr.laetitia.HttpResponse;
+import fr.laetitia.model.Admin;
 import fr.laetitia.model.Prestation;
 import fr.laetitia.model.Projet;
 import fr.laetitia.model.Type;
-import fr.laetitia.repository.PhotoRepository;
-import fr.laetitia.repository.PrestationRepository;
-import fr.laetitia.repository.ProjetRepository;
-import fr.laetitia.repository.TypeRepository;
+import fr.laetitia.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +33,9 @@ public class ProjetController {
 
     @Autowired
     TypeRepository typeRepository;
+
+    @Autowired
+    AdminRepository adminRepository;
 
     /**
      * Affiche la liste de tous les projets
@@ -123,12 +124,27 @@ public class ProjetController {
         }
     }
 
+    @GetMapping("/admins/{adminLogin}")
+    public ResponseEntity<?> findByAdmin(@PathVariable String adminLogin) {
+        Optional<Admin> admin = adminRepository.findByLogin(adminLogin);
+        if (admin.isPresent()) {
+            Set<Projet> listeProjets = admin.get().getListeProjets();
+            if (listeProjets.isEmpty()) {
+                return HttpResponse.NOT_FOUND;
+            } else {
+                return ResponseEntity.ok(listeProjets);
+            }
+        } else {
+            return HttpResponse.NOT_FOUND;
+        }
+    }
+
     /**
      * Afficher un projet via son id
      */
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@RequestParam int id) {
+    public ResponseEntity<?> findById(@PathVariable int id) {
         Optional<Projet> projet = projetRepository.findById(id);
         if (projet.isPresent()) {
             return ResponseEntity.ok(projet.get());
