@@ -9,6 +9,7 @@ import fr.laetitia.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -28,6 +29,9 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     /**
      * Affiche tous les administrateurs
      */
@@ -36,18 +40,7 @@ public class AdminController {
         return adminRepository.findAll();
     }
 
-    /**
-     * Enregistrer un nouvel administrateur
-     */
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody Admin admin) {
-        Optional<Admin> maybeAdmin = adminRepository.findById(admin.getLogin());
-        if (maybeAdmin.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce login est déjà utilisé");
-        } else {
-            return ResponseEntity.status(HttpStatus.CREATED).body(adminRepository.save(admin));
-        }
-    }
+
 
     /**
      * Vérifier si un administrateur avec le login proposé existe déjà
@@ -64,6 +57,11 @@ public class AdminController {
     public ResponseEntity<?> update(@RequestBody Admin admin) {
         Optional<Admin> maybeAdmin = adminRepository.findById(admin.getLogin());
         if (maybeAdmin.isPresent()) {
+            if(admin.getPassword().isEmpty()){
+                admin.setPassword(maybeAdmin.get().getPassword());
+            } else{
+                admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body((adminRepository.save(admin)));
         } else {
             return HttpResponse.NOT_FOUND;
@@ -89,7 +87,15 @@ public class AdminController {
     public ResponseEntity<Admin> signup(@RequestBody Admin admin) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(admin));
     }
-
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody Admin admin) {
+        Optional<Admin> maybeAdmin = adminRepository.findById(admin.getLogin());
+        if (maybeAdmin.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce login est déjà utilisé");
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(adminRepository.save(admin));
+        }
+    }
     /**
      * connecte un administrateur
      */

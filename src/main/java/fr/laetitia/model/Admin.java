@@ -3,10 +3,7 @@ package fr.laetitia.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +19,7 @@ import java.util.Set;
  * @author LOUISL
  */
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 @Entity
 @Getter
 @Setter
@@ -50,7 +48,7 @@ public class Admin implements UserDetails {
     private boolean compteValide = true;
 
 
-    public Admin(String login, boolean compteValide, String password, String photo, String presentation) {
+    public Admin(String login, boolean compteValide, String password, String photo, String presentation, String role, String prenom) {
         this.login = login;
         this.compteValide = true;
         this.password = password;

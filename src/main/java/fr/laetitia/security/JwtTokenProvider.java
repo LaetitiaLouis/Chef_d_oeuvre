@@ -57,6 +57,7 @@ public class JwtTokenProvider {
         claims.put("auth", admin.getAuthorities().stream().map(s -> s.getAuthority()).filter(Objects::nonNull).collect(Collectors.toList()));
         claims.put("photo", admin.getPhoto());
         claims.put("prenom",admin.getPrenom());
+//        claims.put(""), admin.isCompteValide();
         claims.put("presentation", admin.getPresentation());
 
         Date now = new Date();
@@ -98,7 +99,7 @@ public class JwtTokenProvider {
     }
 
     /**
-     * m<éthode sui vérifie la validation
+     * méthode sui vérifie la validation
      */
     public boolean validateToken(String token) throws Exception {
         try{

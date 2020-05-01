@@ -57,6 +57,7 @@ public class UserService implements UserDetailsService {
 
     public Admin signup(Admin admin) {
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+        admin.setRole("ADMIN");
         return adminRepository.save(admin);
     }
 }

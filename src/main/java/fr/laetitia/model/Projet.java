@@ -46,19 +46,16 @@ public class Projet {
     @ManyToOne
     private Type type;
 
-    private int photoId;
-
     @JsonIgnoreProperties("listeProjets")
     @ManyToMany(mappedBy = "listeProjets")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Prestation> prestations = new HashSet<>();
 
-    public Projet(String intitule, Admin admin, Client client, Type type, int photoId) {
+    public Projet(String intitule, Admin admin, Client client, Type type) {
         this.intitule = intitule;
         this.admin = admin;
         this.client = client;
         this.type = type;
-        this.photoId = photoId;
     }
 
 public void Photo(Photo photo) {

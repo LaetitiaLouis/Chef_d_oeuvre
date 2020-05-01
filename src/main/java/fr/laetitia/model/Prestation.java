@@ -26,7 +26,6 @@ public class Prestation {
     private String intitule;
     private String categorie;
 
-//  @JsonIgnoreProperties("prestations")
     @ManyToMany
     private Set<Projet> listeProjets = new HashSet<>();
 
