@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -70,7 +71,7 @@ public class ProjetController {
     @PostMapping
     public @ResponseBody
     ResponseEntity<?> create(@RequestBody Projet projet) {
-        Optional<Projet> maybeProjet = projetRepository.findById(projet.getId());
+        Optional<Projet> maybeProjet = projetRepository.findByIntitule(projet.getIntitule());
         if (maybeProjet.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce projet existe déjà");
         } else {
@@ -80,9 +81,18 @@ public class ProjetController {
 
     /**
      * Supprimer un projet par son id
+     * suppression du projet dans chacune des prestationhs qui contient
+     * sauvegarde de la presttion modifiée
+     * suppression du projet
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProjet(@PathVariable int id) {
+        Projet projet = projetRepository.findById(id).get();
+        for(Prestation p: projet.getPrestations()) {
+            p.getListeProjets().remove(projet);
+            prestationRepository.save(p);
+        }
+//        projetRepository.delete(projet);
         projetRepository.deleteById(id);
         return ResponseEntity.ok("Projet supprimé");
     }
@@ -152,4 +162,25 @@ public class ProjetController {
             return HttpResponse.NOT_FOUND;
         }
     }
+
+//    @GetMapping("/{intitule}")
+//    public ResponseEntity<?> findByIntitule(@PathVariable String intitule) {
+//        Optional<Projet> projet = projetRepository.findByIntitule(intitule);
+//        if (projet.isPresent()) {
+//            return ResponseEntity.ok(projet.get());
+//        } else {
+//            return HttpResponse.NOT_FOUND;
+//        }
+//    }
+
+    @GetMapping("/findByTypeAndIntitule")
+    public ResponseEntity<?> findByTypeAndIntitule(@RequestParam String recherche){
+        List<Projet> projets = projetRepository.findByTypeAndIntitule(recherche, recherche);
+        if (projets.isEmpty()) {
+            return HttpResponse.NOT_FOUND;
+        } else {
+            return ResponseEntity.ok(projets);
+        }
+    }
 }
+

@@ -27,8 +27,16 @@ public class Photo {
     private String lien;
 
     @JsonIgnoreProperties("photos")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Projet projet;
+
+//    @PreRemove
+//    private void preRemove (){
+//        for (Projet p : projet){
+//            p.setPhotos(null);
+//        }
+//    }
+
 
     public Photo(String nom, String categorie, String lien, Projet projet) {
         this.nom = nom;

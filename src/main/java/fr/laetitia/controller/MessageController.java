@@ -1,6 +1,7 @@
 package fr.laetitia.controller;
 
 import fr.laetitia.HttpResponse;
+import fr.laetitia.model.Client;
 import fr.laetitia.model.Message;
 import fr.laetitia.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +42,15 @@ public class MessageController {
     @PostMapping
     public @ResponseBody
     ResponseEntity<?> create(@RequestBody Message message) {
-        Optional<Message> p = messageRepository.findById(message.getId());
-        if (p.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce message existe déjà");
-        } else {
-            message.setDate(LocalDate.now());
+//        Optional<Message> p = messageRepository.findById(message.getId());
+//        if (p.isPresent()) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce message existe déjà");
+//        } else {
+//            message.setDate(LocalDate.now());
+        System.out.println("message");
             return ResponseEntity.status(HttpStatus.CREATED).body(messageRepository.save(message));
         }
-    }
+//    }
 
     /**
      * Modifier un message
@@ -70,5 +72,15 @@ public class MessageController {
     public ResponseEntity<?> deleteProspect(@PathVariable int id) {
         messageRepository.deleteById(id);
         return ResponseEntity.ok("Message supprimé");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable int id) {
+        Optional<Message> message = messageRepository.findById(id);
+        if (message.isPresent()) {
+            return ResponseEntity.ok(message.get());
+        } else {
+            return HttpResponse.NOT_FOUND;
+        }
     }
 }

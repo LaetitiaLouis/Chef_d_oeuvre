@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -34,12 +35,12 @@ public class Projet {
     private Admin admin;
 
     @JsonIgnoreProperties("projet")
-    @OneToMany(mappedBy = "projet")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "projet", cascade = CascadeType.DETACH)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Photo> photos = new HashSet<>();
 
     @JsonIgnoreProperties("listeProjets")
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.DETACH)
     private Client client;
 
     @JsonIgnoreProperties("listeProjets")
@@ -48,8 +49,29 @@ public class Projet {
 
     @JsonIgnoreProperties("listeProjets")
     @ManyToMany(mappedBy = "listeProjets")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Set<Prestation> prestations = new HashSet<>();
+
+    @PreRemove
+    private void preRemove() {
+        for (Photo p : photos) {
+            p.setProjet(null);
+        }
+    }
+
+    //Permet de comparer des objets => utile pour remove un objet d'une liste (prestation)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Projet projet = (Projet) o;
+        return id == projet.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public Projet(String intitule, Admin admin, Client client, Type type) {
         this.intitule = intitule;

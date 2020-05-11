@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -27,7 +29,8 @@ public class Message {
     private boolean vu = false;
     private LocalDate date;
     private boolean statutClient = false;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Client client;
 
     public Message(String objet, String contenu, boolean vu, LocalDate date, Client client) {

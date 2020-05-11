@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -41,6 +43,20 @@ public class Client {
 	@JsonIgnoreProperties("client")
 	@OneToMany(mappedBy = "client")
 	private Set<Projet> listeProjets = new HashSet<>();
+
+	@JsonIgnoreProperties("client")
+	@OneToMany(mappedBy = "client")
+	private Set<Message> messages = new HashSet<>();
+
+	@PreRemove
+	private void preRemove() {
+		for (Projet p : listeProjets) {
+			p.setClient(null);
+		}
+		for (Message m : messages) {
+			m.setClient(null);
+		}
+	}
 
 	public Client(String nom, String prenom, String adresse, String codePostal, String ville, String email, String telephone, String refDevis, String refFacture){
 		this.nom = nom;
