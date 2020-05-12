@@ -2,12 +2,14 @@ package fr.laetitia.controller;
 
 import fr.laetitia.HttpResponse;
 import fr.laetitia.model.Client;
+import fr.laetitia.model.Projet;
 import fr.laetitia.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -81,6 +83,16 @@ public class ClientController {
             return ResponseEntity.ok(client.get());
         } else {
             return HttpResponse.NOT_FOUND;
+        }
+    }
+
+    @GetMapping("/findByNomAndPrenom")
+    public ResponseEntity<?> findByNomAndPrenom(@RequestParam String recherche){
+        List<Client> clients = clientRepository.findByNomAndPrenom(recherche, recherche);
+        if (clients.isEmpty()) {
+            return HttpResponse.NOT_FOUND;
+        } else {
+            return ResponseEntity.ok(clients);
         }
     }
 }

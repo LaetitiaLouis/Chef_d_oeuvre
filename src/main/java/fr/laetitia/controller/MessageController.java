@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.Optional;
 
+
 /**
  * @author LOUISL
  */
@@ -46,10 +47,10 @@ public class MessageController {
 //        if (p.isPresent()) {
 //            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce message existe déjà");
 //        } else {
-//            message.setDate(LocalDate.now());
+            message.setDate(LocalDate.now());
         System.out.println("message");
-            return ResponseEntity.status(HttpStatus.CREATED).body(messageRepository.save(message));
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageRepository.save(message));
+    }
 //    }
 
     /**
@@ -68,7 +69,7 @@ public class MessageController {
     /**
      * Supprimer un message par son id
      */
-    @DeleteMapping ("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProspect(@PathVariable int id) {
         messageRepository.deleteById(id);
         return ResponseEntity.ok("Message supprimé");
