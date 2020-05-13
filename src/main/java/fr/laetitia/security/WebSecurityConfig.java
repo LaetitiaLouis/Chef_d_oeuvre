@@ -48,11 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/admins").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
 
         //apply JWT
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        http.headers().frameOptions().disable();
     }
 
     /**
