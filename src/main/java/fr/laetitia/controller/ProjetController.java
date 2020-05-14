@@ -20,7 +20,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/projets")
-@CrossOrigin("http://localhost:4200")
+//@CrossOrigin("http://localhost:4200")
 public class ProjetController {
 
     @Autowired

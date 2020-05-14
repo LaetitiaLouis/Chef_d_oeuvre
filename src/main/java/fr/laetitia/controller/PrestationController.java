@@ -21,7 +21,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/prestations")
-@CrossOrigin("http://localhost:4200")
+//@CrossOrigin("http://localhost:4200")
 public class PrestationController {
 
     @Autowired
