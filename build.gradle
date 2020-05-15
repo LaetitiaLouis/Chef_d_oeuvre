@@ -2,7 +2,6 @@ plugins {
 	id 'org.springframework.boot' version '2.2.5.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
-	id 'war'
 	id "io.freefair.lombok" version "5.0.0-rc6"
 }
 
@@ -31,7 +30,6 @@ dependencies {
 //	runtimeOnly 'mysql:mysql-connector-java'
 //	H2
 	implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
