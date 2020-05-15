@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.laetitia.model.Admin;
 import fr.laetitia.repository.AdminRepository;
+import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -46,6 +47,13 @@ public class AdminControllerTest {
 		admin.setLogin("Nad");
 	}
 
+	@Test
+	void getAll() throws Exception {
+		when(adminRepository.findAll()).thenReturn(null);
+		ResultActions reponse = this.mockMvc.perform(get(BASE_URL));
+				reponse.andExpect(status().isOk());
+
+	}
 	@Test
 	public void testDelete() throws Exception {
 		this.mockMvc.perform(delete(BASE_URL + "login=Nad")).andExpect(status().isOk());
