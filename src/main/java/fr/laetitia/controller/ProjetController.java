@@ -1,16 +1,14 @@
 package fr.laetitia.controller;
 
 import fr.laetitia.HttpResponse;
-import fr.laetitia.model.Admin;
-import fr.laetitia.model.Prestation;
-import fr.laetitia.model.Projet;
-import fr.laetitia.model.Type;
+import fr.laetitia.model.*;
 import fr.laetitia.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -57,8 +55,16 @@ public class ProjetController {
     @PutMapping
     public @ResponseBody
     ResponseEntity<?> update(@RequestBody Projet projet) {
+//        vérifie si projet est présent et le récupère
         Optional<Projet> maybeProjet = projetRepository.findById(projet.getId());
+        // si le projet est présent alors on supprime les photos
         if (maybeProjet.isPresent()) {
+            List<Photo> photosAsupprimer = photoRepository.findByProjet(maybeProjet.get());
+            for(Photo p: projet.getPhotos()) {
+                photosAsupprimer.remove(p);
+            }
+            photoRepository.deleteAll(photosAsupprimer);
+            //on sauvegarde le projet modifié avec les nouvelles photos => voir méthode prePersist dans model projet
             return ResponseEntity.status(HttpStatus.CREATED).body(projetRepository.save(projet));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce projet n'existe pas");
@@ -66,7 +72,7 @@ public class ProjetController {
     }
 
     /**
-     * Enregistrer un projet
+     * Enregistrer un projets
      */
     @PostMapping
     public @ResponseBody
@@ -88,11 +94,10 @@ public class ProjetController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProjet(@PathVariable int id) {
         Projet projet = projetRepository.findById(id).get();
-        for(Prestation p: projet.getPrestations()) {
+        for (Prestation p : projet.getPrestations()) {
             p.getListeProjets().remove(projet);
             prestationRepository.save(p);
         }
-//        projetRepository.delete(projet);
         projetRepository.deleteById(id);
         return ResponseEntity.ok("Projet supprimé");
     }
@@ -174,7 +179,9 @@ public class ProjetController {
 //    }
 
     @GetMapping("/findByTypeAndIntitule")
-    public ResponseEntity<?> findByTypeAndIntitule(@RequestParam String recherche){
+    public ResponseEntity<?> findByTypeAndIntitule(@RequestParam String recherche) {
+//        recherche = recherche.toLowerCase();
+//        System.out.println(recherche);
         List<Projet> projets = projetRepository.findByTypeAndIntitule(recherche, recherche);
         if (projets.isEmpty()) {
             return HttpResponse.NOT_FOUND;

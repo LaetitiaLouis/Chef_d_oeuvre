@@ -52,7 +52,7 @@ public class JwtTokenProvider {
      * "iat" pour date du jour
      * "exp" pour date du jour + validityTime
      */
-    public String createToken(Admin admin) {//mettre adin en parametre et enlever login..
+    public String createToken(Admin admin) {//mettre admin en parametre et enlever login..
         Claims claims = Jwts.claims().setSubject(admin.getLogin());
         claims.put("auth", admin.getAuthorities().stream().map(s -> s.getAuthority()).filter(Objects::nonNull).collect(Collectors.toList()));
         claims.put("photo", admin.getPhoto());

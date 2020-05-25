@@ -69,7 +69,7 @@ public class ClientController {
         if (maybeClient.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body((clientRepository.save(client)));
         } else {
-            return HttpResponse.NOT_FOUND;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce client n'existe pas");
         }
     }
 
@@ -88,6 +88,7 @@ public class ClientController {
 
     @GetMapping("/findByNomAndPrenom")
     public ResponseEntity<?> findByNomAndPrenom(@RequestParam String recherche){
+//        recherche = recherche.toLowerCase();
         List<Client> clients = clientRepository.findByNomAndPrenom(recherche, recherche);
         if (clients.isEmpty()) {
             return HttpResponse.NOT_FOUND;

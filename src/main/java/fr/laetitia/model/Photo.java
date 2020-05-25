@@ -9,6 +9,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * @author LOUISL
@@ -27,15 +29,21 @@ public class Photo {
     private String lien;
 
     @JsonIgnoreProperties("photos")
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Projet projet;
 
-//    @PreRemove
-//    private void preRemove (){
-//        for (Projet p : projet){
-//            p.setPhotos(null);
-//        }
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Photo photo = (Photo) o;
+        return id == photo.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 
     public Photo(String nom, String categorie, String lien, Projet projet) {

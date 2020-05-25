@@ -31,16 +31,29 @@ public class Projet {
     private String description;
 
     @JsonIgnoreProperties("listeProjets")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     private Admin admin;
 
     @JsonIgnoreProperties("projet")
-    @OneToMany(mappedBy = "projet", cascade = CascadeType.DETACH)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL)
     private Set<Photo> photos = new HashSet<>();
 
+    // méthode appelé avant la sauvegarde d'un nouveau projet auquel on y attache chaque photo
+    @PrePersist
+    public void prePersist() {
+        for (Photo p : photos) {
+            p.setProjet(this);
+        }
+    }
+
+    // méthode appelée avant la màj d'un projet où on apelle la méthode prePersist
+    @PreUpdate
+    public void preUpdate() {
+        prePersist();
+    }
+
     @JsonIgnoreProperties("listeProjets")
-    @ManyToOne (cascade = CascadeType.DETACH)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private Client client;
 
     @JsonIgnoreProperties("listeProjets")
@@ -51,13 +64,6 @@ public class Projet {
     @ManyToMany(mappedBy = "listeProjets")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Set<Prestation> prestations = new HashSet<>();
-
-    @PreRemove
-    private void preRemove() {
-        for (Photo p : photos) {
-            p.setProjet(null);
-        }
-    }
 
     //Permet de comparer des objets => utile pour remove un objet d'une liste (prestation)
     @Override
@@ -73,18 +79,4 @@ public class Projet {
         return Objects.hash(id);
     }
 
-    public Projet(String intitule, Admin admin, Client client, Type type) {
-        this.intitule = intitule;
-        this.admin = admin;
-        this.client = client;
-        this.type = type;
-    }
-
-public void Photo(Photo photo) {
-    	photos.add(photo);
-}
-
-public void Prestation(Prestation prestation) {
-    	prestations.add(prestation);
-}
 }

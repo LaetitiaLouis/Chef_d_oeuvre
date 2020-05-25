@@ -58,8 +58,8 @@ public class MessageController {
      */
     @PutMapping
     public ResponseEntity<?> update(@RequestBody Message message) {
-        Optional<Message> p = messageRepository.findById(message.getId());
-        if (p.isPresent()) {
+        Optional<Message> m = messageRepository.findById(message.getId());
+        if (m.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body((messageRepository.save(message)));
         } else {
             return HttpResponse.NOT_FOUND;
