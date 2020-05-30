@@ -182,7 +182,7 @@ public class ProjetController {
     public ResponseEntity<?> findByTypeAndIntitule(@RequestParam String recherche) {
 //        recherche = recherche.toLowerCase();
 //        System.out.println(recherche);
-        List<Projet> projets = projetRepository.findByTypeAndIntitule(recherche, recherche);
+        List<Projet> projets = projetRepository.findByTypeContainingOrIntituleContainingAllIgnoreCase(recherche, recherche);
         if (projets.isEmpty()) {
             return HttpResponse.NOT_FOUND;
         } else {

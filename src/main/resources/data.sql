@@ -3,7 +3,7 @@ INSERT INTO admin(login, compte_valide, password, photo, presentation, role, pre
 ( 'nagar33',true, '$2y$10$QRASxzQWKUdzWTbTAFrZIOm5AqvCRBmWI6UHRAshWs.PTlC39bWjO', 'https://www.dropbox.com/s/65o0j4dfhwkg1rx/photo%20Nad%C3%A8g.jpg?dl=1',
 'Passionnée par l''architecture et la construction, j''ai entrepris en 2019 une orientation professionnelle vouée au bâtiment. J''ai suivi des formations de dessin en batîment, et suis diplômée d''un titre professionnel de Technicien d''études du bâtiment - Dessin de projets (2019). Les enjeux environnementaux actuels et futurs étant primordiaux, construire doit être un acte responsable, aussi je m''attache à concevoir dans une démarche bioclimatique. Je considère également le design comme primordial.
 La conception architecturale, tant fonctionnelle qu''esthétique doit aussi être initialement parfaitement pensée. J''exerce mon activité de dessinateur principalement sur le logiciel Autocad mais suis également compétente sur d''autres logiciels d''architecture sur lesquels j''ai aussi été formée.', 'ADMIN', 'Nadège'),
-( 'laur33', true, '987654', 'https://www.dropbox.com/s/1wuvh05xq9uh7jf/Laurence%20portrait%201%20NB.jpeg?dl=1', 'Architecte depuis plus de 15 ans, j''ai tout au long de mon parcours professionnel géré des projets de tailles et natures différentes (santé, industrie, tertiaire, éducation, etc.).
+( 'laur33', true, '$2y$10$r0TSuVjApcOziqVm/izA3OLvtLJjm7Dsh7HzKyEqHWyyGfU6aRIWa', 'https://www.dropbox.com/s/1wuvh05xq9uh7jf/Laurence%20portrait%201%20NB.jpeg?dl=1', 'Architecte depuis plus de 15 ans, j''ai tout au long de mon parcours professionnel géré des projets de tailles et natures différentes (santé, industrie, tertiaire, éducation, etc.).
 Mon expérience d’architecte est complète : avant tout femme de terrain, je connais sur le bout des doigts les problématiques de la gestion du projet architectural pour l’ensemble des phases, de la création architecturale, jusqu’à sa concrétisation.
 En perpétuelle remise en question, c’est dans l’exercice de mon métier que naît l’envie d’exploiter de nouveaux outils (visualisation), et c’est dans la volonté de transmettre et de combiner compétence et originalité que naît celle de faire vivre le partenariat LNProjet. Aussi, mes conceptions sont principalement réalisées via Revit et Autocad.','ADMIN', 'Laurence');
 
@@ -17,9 +17,9 @@ INSERT INTO client(nom, prenom, adresse, code_postal, ville, email, telephone, r
 
 --Message
 INSERT INTO message(objet, contenu, vu,  date, client_id, statut_client) VALUES
-('demande de devis', 'blablabla blablabla blablabla blablabla', true, '2020-01-15', 3, false ),
-('demande de renseignement', 'blablabla blablabla blablabla blablabla', false, '2020-03-18', 1, false ),
-('demande de devis', 'blablabla blablabla blablabla blablabla', false, '2020-03-03', 2, false );
+('demande de devis', 'Bonjour, je me permets de vous contacter car j''ai un projet de réaménegement pour ma résidence principale. Je souhaiterais avoir un devis pour la ralisation de plans2D et maquette 3D pour avoir une idée du rendu. Vous en remerciant par avance, Mme Tournesol Elsa', true, '2020-01-15', 3, false ),
+('Offre de partenariat', 'Nous souhaiterions vous rencontrer afin de vous proposer un partenariat en vous confiant certains travaux de dessin demandés par nos clients. Merci de bien vouloir prendre contact avec nous si cela pouvait vous inteéresser.Cordiaement, Le cabinet d''étude Malom', false, '2020-03-18', 1, false ),
+('demande de renseignement', 'Bonjour, mon épouse et moi avons un projet d''agrandissement et nous souhaiterions au préalable réaliser une étude de projet. Merci de bien vouloir nous recontacter. Mr Léonard Jackie' , false, '2020-03-03', 2, false );
 
 
 --Prestation

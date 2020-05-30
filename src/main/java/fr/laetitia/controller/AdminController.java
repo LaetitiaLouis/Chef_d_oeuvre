@@ -57,7 +57,7 @@ public class AdminController {
     public ResponseEntity<?> update(@RequestBody Admin admin) {
         Optional<Admin> maybeAdmin = adminRepository.findById(admin.getLogin());
         if (maybeAdmin.isPresent()) {
-            if(admin.getPassword().isEmpty()){
+            if(admin.getPassword() == null) {
                 admin.setPassword(maybeAdmin.get().getPassword());
             } else{
                 admin.setPassword(passwordEncoder.encode(admin.getPassword()));

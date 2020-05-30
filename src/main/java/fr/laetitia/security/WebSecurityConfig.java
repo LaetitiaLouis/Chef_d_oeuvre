@@ -47,9 +47,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/admins").permitAll()
+                .antMatchers("/admins/sign-in").permitAll()
+                .antMatchers("/admins/**").hasAuthority("ADMIN")
                 .antMatchers("/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/admins").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
 
         //apply JWT

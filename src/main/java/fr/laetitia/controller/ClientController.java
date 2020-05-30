@@ -88,8 +88,7 @@ public class ClientController {
 
     @GetMapping("/findByNomAndPrenom")
     public ResponseEntity<?> findByNomAndPrenom(@RequestParam String recherche){
-//        recherche = recherche.toLowerCase();
-        List<Client> clients = clientRepository.findByNomAndPrenom(recherche, recherche);
+        List<Client> clients = clientRepository.findByNomContainingOrPrenomContainingAllIgnoreCase(recherche, recherche);
         if (clients.isEmpty()) {
             return HttpResponse.NOT_FOUND;
         } else {

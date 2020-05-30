@@ -2,6 +2,7 @@ package fr.laetitia.repository;
 
 
 import fr.laetitia.model.Projet;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -9,11 +10,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProjetRepository extends CrudRepository<Projet, Integer> {
+public interface ProjetRepository extends JpaRepository<Projet, Integer> {
 
     Optional<Projet> findByIntitule(String intitule);
+    List<Projet> findByTypeContainingOrIntituleContainingAllIgnoreCase(String typeProjet, String intitule);
 
-    @Query("SELECT p from Projet p WHERE p.type.libelle LIKE CONCAT('%',:typeProjet,'%') OR p.intitule LIKE CONCAT('%', :intitule,'%')")
-    List<Projet> findByTypeAndIntitule(@Param("typeProjet")String typeProjet, @Param("intitule") String intitule);
+//    @Query("SELECT p from Projet p WHERE p.type.libelle LIKE CONCAT('%',:typeProjet,'%') OR p.intitule LIKE CONCAT('%', :intitule,'%')")
+//    List<Projet> findByTypeAndIntitule(@Param("typeProjet")String typeProjet, @Param("intitule") String intitule);
 
 }

@@ -1,11 +1,10 @@
 package fr.laetitia.repository;
 
-import org.springframework.data.repository.CrudRepository;
-
 import fr.laetitia.model.Admin;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AdminRepository extends CrudRepository<Admin, String>{
+public interface AdminRepository extends JpaRepository<Admin, String> {
     Optional<Admin> findByLogin (String login);
 }
