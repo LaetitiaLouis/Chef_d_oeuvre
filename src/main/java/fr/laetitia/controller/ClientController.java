@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/clients")
-//@CrossOrigin("http://localhost:4200")
 public class ClientController {
 
     @Autowired
@@ -34,7 +33,6 @@ public class ClientController {
             return ResponseEntity.ok(clients);
         } else {
             return HttpResponse.NOT_FOUND;
-
         }
     }
 
@@ -54,7 +52,7 @@ public class ClientController {
     /**
      * Supprimer un client par son id
      */
-    @DeleteMapping ("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable int id) {
         clientRepository.deleteById(id);
         return ResponseEntity.ok("Client supprimé");
@@ -86,8 +84,11 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/findByNomAndPrenom")
-    public ResponseEntity<?> findByNomAndPrenom(@RequestParam String recherche){
+    /*
+     *Afficher un client via son nom ou son prénom
+     */
+    @GetMapping("/findByNomOrPrenom")
+    public ResponseEntity<?> findByNomOrPrenom(@RequestParam String recherche) {
         List<Client> clients = clientRepository.findByNomContainingOrPrenomContainingAllIgnoreCase(recherche, recherche);
         if (clients.isEmpty()) {
             return HttpResponse.NOT_FOUND;

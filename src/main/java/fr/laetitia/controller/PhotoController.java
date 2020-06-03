@@ -20,7 +20,6 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/photos")
-//@CrossOrigin("http://localhost:4200")
 public class PhotoController {
 
     @Autowired
@@ -43,7 +42,7 @@ public class PhotoController {
     }
 
     /**
-     * Enregistrer un objet photo
+     * Enregistrer une photo
      */
     @PostMapping
     public @ResponseBody
@@ -60,7 +59,7 @@ public class PhotoController {
      * Supprimer une photo par son id
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping ("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePhoto(@PathVariable int id) {
         photoRepository.deleteById(id);
         return ResponseEntity.ok("Photo supprimée");

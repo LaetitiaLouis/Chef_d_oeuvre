@@ -20,7 +20,6 @@ import java.util.Set;
 /**
  * @author LOUISL
  */
-//@FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode
 @Entity
 @Getter
@@ -48,17 +47,6 @@ public class Admin implements UserDetails {
     private Set<Projet> listeProjets = new HashSet<>();
 
     private boolean compteValide = true;
-
-
-//    public Admin(String login, boolean compteValide, String password, String photo, String presentation, String role, String prenom) {
-//        this.login = login;
-//        this.compteValide = true;
-//        this.password = password;
-//        this.photo = photo;
-//        this.presentation = presentation;
-//        this.role = role;
-//        this.prenom = prenom;
-//   }
 
     @Transient
     public void addProjet(Projet projet) {

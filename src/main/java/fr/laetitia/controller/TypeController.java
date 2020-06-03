@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/types")
-//@CrossOrigin("http://localhost:4200")
 public class TypeController {
 
     @Autowired
@@ -61,10 +60,9 @@ public class TypeController {
     /**
      * Supprimer un type par son id
      */
-    @DeleteMapping ("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteType(@PathVariable int id) {
         typeRepository.deleteById(id);
         return ResponseEntity.ok("Type supprimé");
     }
-
 }

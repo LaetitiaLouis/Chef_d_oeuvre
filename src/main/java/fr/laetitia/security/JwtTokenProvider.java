@@ -10,14 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -56,7 +54,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(admin.getLogin());
         claims.put("auth", admin.getAuthorities().stream().map(s -> s.getAuthority()).filter(Objects::nonNull).collect(Collectors.toList()));
         claims.put("photo", admin.getPhoto());
-        claims.put("prenom",admin.getPrenom());
+        claims.put("prenom", admin.getPrenom());
 //        claims.put(""), admin.isCompteValide();
         claims.put("presentation", admin.getPresentation());
 
@@ -72,40 +70,39 @@ public class JwtTokenProvider {
     }
 
     /**
-     * Méthode qui obtient le  login
-     * @param token
+     * Obtenir le login
      */
-    public String extractLogin(String token){
+    public String extractLogin(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
     /**
-     * méthode qui retourne l'authentification de l'utilisateur
+     * Retourner l'authentification de l'utilisateur
      */
-    public Authentication getAuthentication(String token){
+    public Authentication getAuthentication(String token) {
         UserDetails userDetails = userService.loadUserByUsername(extractLogin(token));
-        return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     /**
-     * Méthode qui resout
+     * Résoudre le Token
      */
-    public String resolveToken(HttpServletRequest req){
+    public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")){
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7); //= nbre lettre Bearer + espace
         }
         return null;
     }
 
     /**
-     * méthode sui vérifie la validation
+     * Vérifier la validation du Token
      */
     public boolean validateToken(String token) throws Exception {
-        try{
+        try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
-        } catch(JwtException | IllegalArgumentException e){
+        } catch (JwtException | IllegalArgumentException e) {
             throw new Exception("Token invalide");
         }
     }

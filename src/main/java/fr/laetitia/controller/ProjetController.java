@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -18,7 +17,6 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/projets")
-//@CrossOrigin("http://localhost:4200")
 public class ProjetController {
 
     @Autowired
@@ -37,7 +35,7 @@ public class ProjetController {
     AdminRepository adminRepository;
 
     /**
-     * Affiche la liste de tous les projets
+     * Afficher la liste de tous les projets
      */
     @GetMapping
     public ResponseEntity<?> findAll() {
@@ -60,11 +58,14 @@ public class ProjetController {
         // si le projet est présent alors on supprime les photos
         if (maybeProjet.isPresent()) {
             List<Photo> photosAsupprimer = photoRepository.findByProjet(maybeProjet.get());
-            for(Photo p: projet.getPhotos()) {
+            for (Photo p : projet.getPhotos()) {
                 photosAsupprimer.remove(p);
+//               p.setProjet(maybeProjet.get());
+                photoRepository.save(p);
             }
             photoRepository.deleteAll(photosAsupprimer);
             //on sauvegarde le projet modifié avec les nouvelles photos => voir méthode prePersist dans model projet
+            projet.getPhotos().forEach(System.out::println);
             return ResponseEntity.status(HttpStatus.CREATED).body(projetRepository.save(projet));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce projet n'existe pas");
@@ -87,17 +88,17 @@ public class ProjetController {
 
     /**
      * Supprimer un projet par son id
-     * suppression du projet dans chacune des prestationhs qui contient
-     * sauvegarde de la presttion modifiée
-     * suppression du projet
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProjet(@PathVariable int id) {
         Projet projet = projetRepository.findById(id).get();
+        // suppression du projet dans chacune des prestations qu'il contient
         for (Prestation p : projet.getPrestations()) {
+            //sauvegarde de la prestation modifiée
             p.getListeProjets().remove(projet);
             prestationRepository.save(p);
         }
+        //suppression du projet
         projetRepository.deleteById(id);
         return ResponseEntity.ok("Projet supprimé");
     }
@@ -168,20 +169,11 @@ public class ProjetController {
         }
     }
 
-//    @GetMapping("/{intitule}")
-//    public ResponseEntity<?> findByIntitule(@PathVariable String intitule) {
-//        Optional<Projet> projet = projetRepository.findByIntitule(intitule);
-//        if (projet.isPresent()) {
-//            return ResponseEntity.ok(projet.get());
-//        } else {
-//            return HttpResponse.NOT_FOUND;
-//        }
-//    }
-
-    @GetMapping("/findByTypeAndIntitule")
-    public ResponseEntity<?> findByTypeAndIntitule(@RequestParam String recherche) {
-//        recherche = recherche.toLowerCase();
-//        System.out.println(recherche);
+    /**
+     *Afficher un projet par son type ou son intitullé
+     */
+    @GetMapping("/findByTypeOrIntitule")
+    public ResponseEntity<?> findByTypeOrIntitule(@RequestParam String recherche) {
         List<Projet> projets = projetRepository.findByTypeContainingOrIntituleContainingAllIgnoreCase(recherche, recherche);
         if (projets.isEmpty()) {
             return HttpResponse.NOT_FOUND;

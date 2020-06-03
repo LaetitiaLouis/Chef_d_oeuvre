@@ -1,7 +1,6 @@
 package fr.laetitia.controller;
 
 import fr.laetitia.HttpResponse;
-import fr.laetitia.model.Client;
 import fr.laetitia.model.Message;
 import fr.laetitia.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,11 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/messages")
-//@CrossOrigin("http://localhost:4200")
 public class MessageController {
 
     @Autowired
     MessageRepository messageRepository;
+
 
     /**
      * Afficher la liste des messages
@@ -38,20 +37,15 @@ public class MessageController {
     }
 
     /**
-     * Enregistrer un objet message
+     * Enregistrer un message
      */
     @PostMapping
     public @ResponseBody
     ResponseEntity<?> create(@RequestBody Message message) {
-//        Optional<Message> p = messageRepository.findById(message.getId());
-//        if (p.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce message existe déjà");
-//        } else {
-            message.setDate(LocalDate.now());
+        message.setDate(LocalDate.now());
         System.out.println("message");
         return ResponseEntity.status(HttpStatus.CREATED).body(messageRepository.save(message));
     }
-//    }
 
     /**
      * Modifier un message
@@ -75,6 +69,9 @@ public class MessageController {
         return ResponseEntity.ok("Message supprimé");
     }
 
+    /**
+     *Afficher un message par son id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {
         Optional<Message> message = messageRepository.findById(id);

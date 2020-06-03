@@ -1,6 +1,5 @@
 package fr.laetitia.security;
 
-import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

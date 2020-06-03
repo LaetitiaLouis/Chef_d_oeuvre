@@ -1,16 +1,11 @@
 package fr.laetitia.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.Iterator;
-import java.util.Objects;
 
 /**
  * @author LOUISL
@@ -39,12 +34,6 @@ public class Photo {
         Photo photo = (Photo) o;
         return id == photo.id;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
 
     public Photo(String nom, String categorie, String lien, Projet projet) {
         this.nom = nom;
