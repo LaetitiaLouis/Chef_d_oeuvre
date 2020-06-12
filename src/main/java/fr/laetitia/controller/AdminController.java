@@ -4,7 +4,7 @@ import fr.laetitia.HttpResponse;
 import fr.laetitia.model.Admin;
 import fr.laetitia.model.JsonWebToken;
 import fr.laetitia.repository.AdminRepository;
-import fr.laetitia.services.UserService;
+import fr.laetitia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +38,10 @@ public class AdminController {
         return adminRepository.findAll();
     }
 
-
     /**
-     * Vérifier si un administrateur avec le login proposé existe déjà
+     * Vérifie si le login proposé par l'utilisateur existe déjà
+     * @param login le login de l'utilisateur
+     * @return le login de l'utilisateur
      */
     @GetMapping("/loginExists")
     public boolean checkIfLoginExists(@RequestParam String login) {

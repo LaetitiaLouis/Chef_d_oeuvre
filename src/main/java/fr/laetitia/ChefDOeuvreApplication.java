@@ -9,5 +9,4 @@ public class ChefDOeuvreApplication {
     public static void main(String[] args) {
         SpringApplication.run(ChefDOeuvreApplication.class, args);
     }
-
 }

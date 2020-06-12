@@ -1,4 +1,4 @@
-package fr.laetitia.services;
+package fr.laetitia.service;
 
 import fr.laetitia.model.Admin;
 import fr.laetitia.repository.AdminRepository;
@@ -21,18 +21,20 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private AdminRepository adminRepository;
-
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     /**
+     * on redéfinit la méthode loadByUsername pour récuperer un admin par son identifiant
      *
+     * @param login le login de l'utilisateur
+     * @return un utilisateur
+     * @throws UsernameNotFoundException une erreur si administrateur introuvable
      */
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
@@ -44,8 +46,15 @@ public class UserService implements UserDetailsService {
         }
     }
 
+
     /**
+     * Recupère l'identifiant et le mot de passe saisi, on le compare à notre base de données
+     * et si la combinaison est correcte alors on lui attribue un token
      *
+     * @param login    de l'utilisateur
+     * @param password de l'utilisateur
+     * @return le token
+     * @throws BadCredentialsException une erreur si le login est invalide
      */
     public String signin(String login, String password) throws BadCredentialsException {
         try {
@@ -58,11 +67,23 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     *
+     * encode le mot de passe
      */
     public Admin signup(Admin admin) {
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+        //à la creation d'un admin le role "ADMIN" lui est attribué par defaut
         admin.setRole("ADMIN");
         return adminRepository.save(admin);
     }
+
+//    public void updateAdmin(Admin admin) {
+//        Optional<Admin> maybeAdmin = adminRepository.findById(admin.getLogin());
+//        if (maybeAdmin.isPresent()) {
+//            if (admin.getPassword() == null) {
+//                admin.setPassword(maybeAdmin.get().getPassword());
+//            } else {
+//                admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+//            }
+//        }
+//    }
 }

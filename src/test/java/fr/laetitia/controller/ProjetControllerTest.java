@@ -1,5 +1,6 @@
 package fr.laetitia.controller;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.*;
 
+import fr.laetitia.model.Admin;
+import fr.laetitia.repository.AdminRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +32,7 @@ import fr.laetitia.repository.ProjetRepository;
 import fr.laetitia.repository.TypeRepository;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class ProjetControllerTest {
 
 	@Autowired
@@ -47,6 +50,9 @@ public class ProjetControllerTest {
 	@MockBean
 	PrestationRepository prestationRepository;
 
+	@MockBean
+	AdminRepository adminRepository;
+
 	private final Projet projet = new Projet();
 	private final String BASE_URL = "/projets";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
@@ -59,7 +65,9 @@ public class ProjetControllerTest {
 
 	@Test
 	public void testGetAll() throws Exception {
-		when(projetRepository.findAll()).thenReturn(List.of(projet));
+		List<Projet> projets = new ArrayList<>();
+		projets.add(projet);
+		when(projetRepository.findAll()).thenReturn(projets);
 
 		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].intitule").value("Maison1"));
@@ -71,6 +79,7 @@ public class ProjetControllerTest {
 
 	@Test
 	public void testDelete() throws Exception {
+		doNothing().when(projetRepository).deleteById(1);
 		this.mockMvc.perform(delete(BASE_URL + "/1")).andExpect(status().isOk());
 	}
 
@@ -107,16 +116,17 @@ public class ProjetControllerTest {
 	public void testFindByType() throws Exception {
 		Type type = new Type();
 		type.setId(10);
-		type.setListeProjets(Set.of(projet));
+		Set<Projet> listeProjets = new HashSet<>();
+		type.setListeProjets(listeProjets);
 		when(typeRepository.findById(10)).thenReturn(Optional.of(type));
 
-		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_URL + "types/10")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].id").value(1));
 
-		mockMvc.perform(get(BASE_URL + "/2")).andExpect(status().isNotFound());
+		mockMvc.perform(get(BASE_URL + "types/2")).andExpect(status().isNotFound());
 
 		type.setListeProjets(new HashSet<>());
-		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isNotFound());
+		mockMvc.perform(get(BASE_URL + "types/10")).andExpect(status().isNotFound());
 
 	}
 
@@ -124,17 +134,34 @@ public class ProjetControllerTest {
 	public void testFindByPrestation() throws Exception {
 		Prestation prestation = new Prestation();
 		prestation.setId(10);
-		prestation.setListeProjets(Set.of(projet));
+		Set<Projet> projets = new HashSet<>();
+		prestation.setListeProjets(projets);
 		when(prestationRepository.findById(10)).thenReturn(Optional.of(prestation));
 
-		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_URL + "prestations/10")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].id").value(1));
 
-		mockMvc.perform(get(BASE_URL + "/2")).andExpect(status().isNotFound());
+		mockMvc.perform(get(BASE_URL + "prestations/2")).andExpect(status().isNotFound());
 
 		prestation.setListeProjets(new HashSet<>());
-		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isNotFound());
+		mockMvc.perform(get(BASE_URL + "prestations/10")).andExpect(status().isNotFound());
 
 	}
+	@Test
+	public void testFindByAdmin() throws Exception {
+		Admin admin = new Admin();
+		admin.setLogin("nad");
+		Set<Projet> projets = new HashSet<>();
+		admin.setListeProjets(projets);
+		when(adminRepository.findByLogin("nad")).thenReturn(Optional.of(admin));
 
+		mockMvc.perform(get(BASE_URL + "admins/nad")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].id").value(1));
+
+		mockMvc.perform(get(BASE_URL + "admins/nanou")).andExpect(status().isNotFound());
+
+		admin.setListeProjets(new HashSet<>());
+		mockMvc.perform(get(BASE_URL + "admins/nad")).andExpect(status().isNotFound());
+
+	}
 }

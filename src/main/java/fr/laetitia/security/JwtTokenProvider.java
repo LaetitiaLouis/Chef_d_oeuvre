@@ -1,7 +1,7 @@
 package fr.laetitia.security;
 
 import fr.laetitia.model.Admin;
-import fr.laetitia.services.UserService;
+import fr.laetitia.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -36,26 +37,24 @@ public class JwtTokenProvider {
 
     /**
      * méthode d'initialisation s'exécute avant le constructeur
-     * elle encode le code secret en base64pour la transmission dans le header
+     * elle encode le code secret en base64 pour la transmission dans le header
      */
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
+
     /**
-     * méthode qui créer un token avec login
-     * "sub" pour login
-     * "auth" pour roles
-     * "iat" pour date du jour
-     * "exp" pour date du jour + validityTime
+     * méthode qui crée un token avec login
+     * @param admin les informations de l'administrateur
+     * @return le token sous forme de string
      */
-    public String createToken(Admin admin) {//mettre admin en parametre et enlever login..
+    public String createToken(Admin admin) {
         Claims claims = Jwts.claims().setSubject(admin.getLogin());
-        claims.put("auth", admin.getAuthorities().stream().map(s -> s.getAuthority()).filter(Objects::nonNull).collect(Collectors.toList()));
+        claims.put("auth", admin.getAuthorities().stream().map(GrantedAuthority::getAuthority).filter(Objects::nonNull).collect(Collectors.toList()));
         claims.put("photo", admin.getPhoto());
         claims.put("prenom", admin.getPrenom());
-//        claims.put(""), admin.isCompteValide();
         claims.put("presentation", admin.getPresentation());
 
         Date now = new Date();
@@ -71,6 +70,8 @@ public class JwtTokenProvider {
 
     /**
      * Obtenir le login
+     * @param token le token de l'utilisateur
+     * @return le login sous forme de string
      */
     public String extractLogin(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
@@ -78,6 +79,8 @@ public class JwtTokenProvider {
 
     /**
      * Retourner l'authentification de l'utilisateur
+     * @param token le token de l'utilisateur
+     * @return l'authentification sous forme de string
      */
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userService.loadUserByUsername(extractLogin(token));
@@ -86,6 +89,8 @@ public class JwtTokenProvider {
 
     /**
      * Résoudre le Token
+     * @param req la requête de type HttpServlet venant du front
+     * @return le token sous forme de string
      */
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
@@ -96,7 +101,10 @@ public class JwtTokenProvider {
     }
 
     /**
-     * Vérifier la validation du Token
+     *  Vérifier la validation du Token
+     * @param token de l'utilisateur
+     * @return le token sous forme string
+     * @throws Exception si le token est invalide
      */
     public boolean validateToken(String token) throws Exception {
         try {

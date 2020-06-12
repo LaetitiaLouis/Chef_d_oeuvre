@@ -1,5 +1,6 @@
 package fr.laetitia.controller;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.*;
 
+import fr.laetitia.model.Message;
+import fr.laetitia.model.Photo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,7 @@ import fr.laetitia.repository.PrestationRepository;
 import fr.laetitia.repository.ProjetRepository;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class PrestationControllerTest {
 
 	@Autowired
@@ -52,9 +55,18 @@ public class PrestationControllerTest {
 	}
 
 	@Test
-	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL + "/1")).andExpect(status().isOk());
+	private void testGetAll() throws Exception {
+		List <Prestation> prestations = new ArrayList<>();
+		prestations.add(prestation);
+		when(prestationRepository.findAll()).thenReturn(prestations);
+
+		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isOk()).andExpect(jsonPath("$.[0].id").value(1));
+
+		when(this.prestationRepository.findAll()).thenReturn(new ArrayList<>());
+
+		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isNotFound());
 	}
+
 
 	@Test
 	public void testNew() throws Exception {
@@ -86,19 +98,8 @@ public class PrestationControllerTest {
 	}
 
 	@Test
-	public void testFindByProjet() throws Exception {
-		Projet projet = new Projet();
-		projet.setId(10);
-		projet.setPrestations(Set.of(prestation));
-		when(projetRepository.findById(10)).thenReturn(Optional.of(projet));
-
-		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.[0]id").value(1));
-
-		mockMvc.perform(get(BASE_URL + "/2")).andExpect(status().isNotFound());
-
-		projet.setPrestations(new HashSet<>());
-		mockMvc.perform(get(BASE_URL + "/10")).andExpect(status().isNotFound());
+	public void testDelete() throws Exception {
+		doNothing().when(prestationRepository).deleteById(1);
+		this.mockMvc.perform(delete(BASE_URL + "/1")).andExpect(status().isOk());
 	}
-
 }

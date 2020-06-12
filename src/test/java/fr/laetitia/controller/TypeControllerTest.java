@@ -1,5 +1,6 @@
 package fr.laetitia.controller;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,7 +28,7 @@ import fr.laetitia.model.Type;
 import fr.laetitia.repository.TypeRepository;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class TypeControllerTest {
 
 	@Autowired
@@ -51,7 +52,9 @@ public class TypeControllerTest {
 
 	@Test
 	public void testGetAll() throws Exception {
-		when(typeRepository.findAll()).thenReturn(List.of(type));
+		List<Type> types = new ArrayList<>();
+		types.add(type);
+		when(typeRepository.findAll()).thenReturn(types);
 
 		mockMvc.perform(get(BASE_URL)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].libelle").value("piscine"));
@@ -60,23 +63,6 @@ public class TypeControllerTest {
 		mockMvc.perform(get(BASE_URL + "/")).andExpect(status().isNotFound());
 	}
 
-	@Test
-	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL + "/1")).andExpect(status().isOk());
-	}
-
-	@Test
-	public void testUpdate() throws Exception {
-		when(typeRepository.save(type)).thenReturn(type);
-		when(typeRepository.findById(1)).thenReturn(Optional.of(type));
-
-		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(type)))
-				.andExpect(status().isCreated());
-
-		type.setId(2);
-		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(type)))
-				.andExpect(status().isNotFound());
-	}
 
 	@Test
 	public void testNew() throws Exception {
@@ -94,4 +80,22 @@ public class TypeControllerTest {
 				.andExpect(status().isConflict());
 	}
 
+	@Test
+	public void testUpdate() throws Exception {
+		when(typeRepository.save(type)).thenReturn(type);
+		when(typeRepository.findById(1)).thenReturn(Optional.of(type));
+
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(type)))
+				.andExpect(status().isCreated());
+
+		type.setId(2);
+		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(type)))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void testDelete() throws Exception {
+		doNothing().when(this.typeRepository).deleteById(1);
+		this.mockMvc.perform(delete(BASE_URL + "/1")).andExpect(status().isOk());
+	}
 }

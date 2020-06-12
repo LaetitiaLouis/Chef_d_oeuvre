@@ -26,6 +26,8 @@ public class Projet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String intitule;
+
+    @Column(columnDefinition = "varchar(1000)")
     private String description;
 
     @JsonIgnoreProperties("listeProjets")

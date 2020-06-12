@@ -58,7 +58,7 @@ public class PhotoController {
     /**
      * Supprimer une photo par son id
      */
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePhoto(@PathVariable int id) {
         photoRepository.deleteById(id);

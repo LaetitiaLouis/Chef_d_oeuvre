@@ -1,5 +1,6 @@
 package fr.laetitia.controller;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,7 +28,7 @@ import fr.laetitia.model.Client;
 import fr.laetitia.repository.ClientRepository;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class ClientControllerTest {
 
 	@Autowired
@@ -50,7 +51,9 @@ public class ClientControllerTest {
 	
 	@Test
 	public void testGetAll() throws Exception {
-		when(clientRepository.findAll()).thenReturn(List.of(client));
+		List<Client> clients = new ArrayList();
+		clients.add(client);
+		when(clientRepository.findAll()).thenReturn(clients);
 
 		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].id").value(1));
@@ -58,12 +61,6 @@ public class ClientControllerTest {
 		when(this.clientRepository.findAll()).thenReturn(new ArrayList<>());
 
 		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isNotFound());
-	}
-
-	
-	@Test
-	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL)).andExpect(status().isOk());
 	}
 
 	@Test
@@ -83,6 +80,12 @@ public class ClientControllerTest {
 	}
 
 	@Test
+	public void testDelete() throws Exception {
+		doNothing().when(this.clientRepository).deleteById(1);
+		this.mockMvc.perform(delete(BASE_URL+"/1")).andExpect(status().isOk());
+	}
+
+	@Test
 	public void testUpdate() throws Exception {
 		when(clientRepository.save(client)).thenReturn(client);
 		when(clientRepository.findById(1)).thenReturn(Optional.of(client));
@@ -95,4 +98,13 @@ public class ClientControllerTest {
 				.andExpect(status().isNotFound());
 	}
 
+	@Test
+	public void testGetById() throws Exception {
+	when(clientRepository.findById(1)).thenReturn(Optional.of(client));
+		mockMvc.perform(get(BASE_URL + "/1")).andExpect(status().isOk())
+				.andExpect(jsonPath("id").value(1));
+
+		mockMvc.perform(get(BASE_URL + "/2")).andExpect(status().isNotFound());
+
+	}
 }

@@ -60,7 +60,6 @@ public class ProjetController {
             List<Photo> photosAsupprimer = photoRepository.findByProjet(maybeProjet.get());
             for (Photo p : projet.getPhotos()) {
                 photosAsupprimer.remove(p);
-//               p.setProjet(maybeProjet.get());
                 photoRepository.save(p);
             }
             photoRepository.deleteAll(photosAsupprimer);

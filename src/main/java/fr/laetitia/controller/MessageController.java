@@ -43,8 +43,8 @@ public class MessageController {
     public @ResponseBody
     ResponseEntity<?> create(@RequestBody Message message) {
         message.setDate(LocalDate.now());
-        System.out.println("message");
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageRepository.save(message));
+        return ResponseEntity.status(HttpStatus.CREATED).
+                body(messageRepository.save(message));
     }
 
     /**

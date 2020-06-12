@@ -1,5 +1,6 @@
 package fr.laetitia.controller;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,7 +28,7 @@ import fr.laetitia.model.Message;
 import fr.laetitia.repository.MessageRepository;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 
 public class MessageControllerTest {
 
@@ -49,14 +50,12 @@ public class MessageControllerTest {
 		message.setId(1);
 	}
 
-	@Test
-	public void testDelete() throws Exception {
-		this.mockMvc.perform(delete(BASE_URL)).andExpect(status().isOk());
-	}
 
 	@Test
 	public void testGetAll() throws Exception {
-		when(messageRepository.findAll()).thenReturn(List.of(message));
+		List<Message> messages = new ArrayList();
+		messages.add(message);
+		when(messageRepository.findAll()).thenReturn(messages);
 
 		this.mockMvc.perform(get(BASE_URL)).andExpect(status().isOk()).andExpect(jsonPath("$.[0].id").value(1));
 
@@ -73,10 +72,6 @@ public class MessageControllerTest {
 
 		mockMvc.perform(post(BASE_URL).accept(JSON).contentType(JSON)
 				.content(objectMapper.writeValueAsString(message))).andExpect(status().isCreated());
-
-		message.setId(1);
-		mockMvc.perform(post(BASE_URL).accept(JSON).contentType(JSON)
-				.content(objectMapper.writeValueAsString(message))).andExpect(status().isConflict());
 	}
 
 	@Test
@@ -90,5 +85,19 @@ public class MessageControllerTest {
 		message.setId(2);
 		mockMvc.perform(put(BASE_URL).contentType(JSON).content(objectMapper.writeValueAsString(message)))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void testDelete() throws Exception {
+		doNothing().when(this.messageRepository).deleteById(1);
+		this.mockMvc.perform(delete(BASE_URL+"/1")).andExpect(status().isOk());
+	}
+
+	@Test
+	public void testGetById () throws Exception {
+		when(messageRepository.findById(1)).thenReturn(Optional.of(message));
+		mockMvc.perform(get(BASE_URL + "/1")).andExpect(status().isOk())
+				.andExpect(jsonPath("id").value(1));
+		mockMvc.perform(get(BASE_URL+"/2")).andExpect(status().isNotFound());
 	}
 }
