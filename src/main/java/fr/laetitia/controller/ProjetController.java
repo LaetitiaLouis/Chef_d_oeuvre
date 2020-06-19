@@ -173,7 +173,7 @@ public class ProjetController {
      */
     @GetMapping("/findByTypeOrIntitule")
     public ResponseEntity<?> findByTypeOrIntitule(@RequestParam String recherche) {
-        List<Projet> projets = projetRepository.findByTypeContainingOrIntituleContainingAllIgnoreCase(recherche, recherche);
+        List<Projet> projets = projetRepository.findByTypeLibelleContainingOrIntituleContainingAllIgnoreCase(recherche, recherche);
         if (projets.isEmpty()) {
             return HttpResponse.NOT_FOUND;
         } else {

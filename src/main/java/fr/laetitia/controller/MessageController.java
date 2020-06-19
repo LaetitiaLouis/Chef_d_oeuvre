@@ -22,7 +22,6 @@ public class MessageController {
     @Autowired
     MessageRepository messageRepository;
 
-
     /**
      * Afficher la liste des messages
      */

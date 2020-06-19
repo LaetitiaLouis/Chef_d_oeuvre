@@ -38,6 +38,11 @@ public class Projet {
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL)
     private Set<Photo> photos = new HashSet<>();
 
+    @JsonIgnoreProperties("listeProjets")
+    @ManyToMany(mappedBy = "listeProjets")
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    private Set<Prestation> prestations = new HashSet<>();
+
     // méthode appelée avant la sauvegarde d'un nouveau projet auquel on y attache chaque photo
     @PrePersist
     public void prePersist() {
@@ -61,10 +66,6 @@ public class Projet {
     @ManyToOne
     private Type type;
 
-    @JsonIgnoreProperties("listeProjets")
-    @ManyToMany(mappedBy = "listeProjets")
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private Set<Prestation> prestations = new HashSet<>();
 
     //Permet de comparer des objets => utile pour remove un objet d'une liste (prestation)
     @Override

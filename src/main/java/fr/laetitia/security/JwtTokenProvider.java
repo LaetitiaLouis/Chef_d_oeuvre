@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class JwtTokenProvider {
-    //on récupère le secret dans le fichier properties
+    //on récupère la secret key dans le fichier properties
     @Value("${security.jwt.token.secret-key}")
     private String secretKey;
 

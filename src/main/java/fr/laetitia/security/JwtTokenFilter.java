@@ -21,11 +21,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     /**
      * Méthode qui ajoute un filtre pour vérifier le token
-     * @param request
-     * @param response
-     * @param filterChain
-     * @throws ServletException
-     * @throws IOException
+     *
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

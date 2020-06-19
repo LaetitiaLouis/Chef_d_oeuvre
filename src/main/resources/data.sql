@@ -18,10 +18,10 @@ INSERT INTO client(nom, prenom, adresse, code_postal, ville, email, telephone, r
 --Message
 INSERT INTO message(objet, contenu, vu,  date, client_id, statut_client) VALUES
 ('Demande de devis', 'Bonjour, je me permets de vous contacter car j''ai un projet de réaménegement pour ma résidence principale. Je souhaiterais avoir un devis pour la ralisation de plans2D et maquette 3D pour avoir une idée du rendu. Vous en remerciant par avance, Mme Tournesol Elsa', true, '2020-01-15', 3, false ),
-('Offre de partenariat', 'Nous souhaiterions vous rencontrer afin de vous proposer un partenariat en vous confiant certains travaux de dessin demandés par nos clients. Merci de bien vouloir prendre contact avec nous si cela pouvait vous inteéresser.Cordiaement, Le cabinet d''étude Malom', false, '2020-03-18', 1, false ),
+('Offre de partenariat', 'Nous souhaiterions vous rencontrer afin de vous proposer un partenariat en vous confiant certains travaux de dessin demandés par nos clients. Merci de bien vouloir prendre contact avec nous si cela pouvait vous inteéresser.Cordiaement, Le cabinet d''étude Malom', false, '2020-02-18', 1, false ),
 ('Demande de renseignements', 'Bonjour, mon épouse et moi avons un projet d''agrandissement et nous souhaiterions au préalable réaliser une étude de projet. Merci de bien vouloir nous recontacter. Mr Léonard Jackie' , true, '2020-03-03', 2, false ),
 ('Demande de devis', 'Bonjour, je souhaiterais obtenir des informations pour un projet de piscine. Mr Soliur', false, '2020-05-15', null, false ),
-('Renseignements', 'Nous souhaiterions rénover une grange. Merci de bien vouloir prendre contact nous afin que nous puissions vous exposer notre projet. Mr et Mme JABAM', true, '2020-02-18', null, false ),
+('Renseignements', 'Nous souhaiterions rénover une grange. Merci de bien vouloir prendre contact nous afin que nous puissions vous exposer notre projet. Mr et Mme JABAM', true, '2020-05-18', null, false ),
 ('Demande de tarifs', 'Bonjour, quels seraient vos tarifs pour le réaménagement d''un appartement, merci Mr LOZERRE' , false, '2020-06-03', 2, false );
 
 
@@ -36,7 +36,7 @@ INSERT INTO prestation(intitule, categorie) VALUES
 ('Etude de projet', 'Conception'),
 ('Aménagement intérieur', 'Conception'),
 ('Accessibilité PMR', 'Conception'),
-('P 2D', 'Dessin'),
+('Plans 2D', 'Dessin'),
 ('Maquette 3D', 'Dessin'),
 ('Images 3D photo réaliste', 'Dessin'),
 ('Animation', 'Dessin');
