@@ -40,7 +40,6 @@ public class MessageControllerTest {
 
 	@MockBean
 	private MessageRepository messageRepository;
-
 	private final Message message = new Message();
 	private final String BASE_URL = "/messages";
 	private final MediaType JSON = MediaType.APPLICATION_JSON;
@@ -49,7 +48,6 @@ public class MessageControllerTest {
 	public void setUp() {
 		message.setId(1);
 	}
-
 
 	@Test
 	public void testGetAll() throws Exception {

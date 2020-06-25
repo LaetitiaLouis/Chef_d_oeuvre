@@ -1,9 +1,12 @@
 package fr.laetitia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -38,6 +41,10 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private Set<Projet> listeProjets = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "client")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Message> messages = new HashSet<>();
 
     @PreRemove
     private void preRemove() {

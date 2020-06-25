@@ -54,6 +54,7 @@ public class ClientController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable int id) {
+
         clientRepository.deleteById(id);
         return ResponseEntity.ok("Client supprimé");
     }
