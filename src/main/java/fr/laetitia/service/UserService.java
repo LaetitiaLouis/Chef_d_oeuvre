@@ -75,15 +75,4 @@ public class UserService implements UserDetailsService {
         admin.setRole("ADMIN");
         return adminRepository.save(admin);
     }
-
-//    public void updateAdmin(Admin admin) {
-//        Optional<Admin> maybeAdmin = adminRepository.findById(admin.getLogin());
-//        if (maybeAdmin.isPresent()) {
-//            if (admin.getPassword() == null) {
-//                admin.setPassword(maybeAdmin.get().getPassword());
-//            } else {
-//                admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-//            }
-//        }
-//    }
 }

@@ -12,6 +12,7 @@ package fr.laetitia.security;
 
 @Configuration
 public class CorsConfiguration {
+
     @Bean
     public FilterRegistrationBean<CorsFilter> simpleCorsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
